@@ -1,0 +1,27 @@
+theme: jekyll-theme-cayman
+title: 全球要闻
+description: 每周六清晨，汇聚世界要闻
+baseurl: "/Horizon" # the subpath of your site, e.g. /blog
+url: "https://thysrael.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+
+github:
+  is_project_page: false
+  show_downloads: false
+
+# Build settings
+markdown: kramdown
+future: true # Allow future posts to be published
+plugins:
+  - jekyll-feed
+feed:
+  path: feed.xml
+exclude:
+  - ".github"
+  - "node_modules"
+
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "default"
