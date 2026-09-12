@@ -39,18 +39,27 @@
         v-for="item in filteredItems" :key="item.id"
         class="border-b-2 border-white/20 py-8 last:border-0"
       >
-        <!-- 标题 + 分数 -->
+        <!-- 标题 + 评分（评分加底框，比标题小一号） -->
         <div class="flex items-center gap-3">
           <h2 class="text-2xl font-bold text-orange-400 hover:text-orange-300 cursor-pointer transition-colors leading-snug">
             {{ item.title }}
           </h2>
-          <span v-if="item.score" class="shrink-0 bg-orange-500 text-white text-base font-bold px-2 py-0.5 rounded">
+          <span v-if="item.score" class="shrink-0 bg-orange-500/20 text-orange-300 text-sm font-bold px-2 py-0.5 rounded">
             {{ item.score }}
           </span>
         </div>
 
         <!-- 摘要 -->
         <p class="text-gray-200 text-base mt-3 leading-relaxed">{{ item.description }}</p>
+
+        <!-- 信息来源行（参考图1 的 telegram 部分） -->
+        <div class="flex items-center flex-wrap gap-2 text-sm text-gray-500 mt-3">
+          <span>{{ item.source }}</span>
+          <span class="text-gray-700">·</span>
+          <span>{{ item.author }}</span>
+          <span class="text-gray-700">·</span>
+          <span>{{ item.time }}</span>
+        </div>
 
         <!-- 分段：背景 / 影响 / 社区讨论 -->
         <div class="mt-4 space-y-3 text-base text-gray-200">
@@ -65,19 +74,20 @@
           </p>
         </div>
 
-        <!-- 参考链接（在社区讨论和标签之间，只显示“参考链接”四个字） -->
-        <div v-if="item.references" class="mt-4 border-l-2 border-white rounded-lg bg-white/5 border border-white/10 px-4 py-3">
-          <a :href="'https://' + item.references" target="_blank" :title="item.references" class="text-base text-gray-300 hover:text-white transition-colors">
+        <!-- 参考链接（参考图1 的样式：灰色大圆角背景框） -->
+        <div v-if="item.references" class="mt-4">
+          <a :href="'https://' + item.references" target="_blank" :title="item.references"
+             class="block bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-base text-gray-300 hover:text-white hover:bg-white/10 transition-colors">
             参考链接
           </a>
         </div>
 
-        <!-- 标签（灰色底框，离正文更近） -->
+        <!-- 标签（底框不变，文字改成淡橙色） -->
         <div v-if="item.tags && item.tags.length" class="mt-2 flex items-center flex-wrap gap-2">
           <span class="text-sm text-gray-400">标签：</span>
           <span
             v-for="tag in item.tags" :key="tag"
-            class="bg-white/5 border border-white/10 text-gray-200 text-sm px-3 py-1 rounded-md"
+            class="bg-white/5 border border-white/10 text-orange-300/80 text-sm px-3 py-1 rounded-md"
           >
             #{{ tag }}
           </span>
@@ -171,6 +181,9 @@ const allItems = ref([
     id: 1,
     title: 'ayghri/i-have-adhd',
     score: 8.5,
+    source: 'github',
+    author: 'ayghri',
+    time: '9月6日 07:21',
     description: 'A skill to stop your coding agent from burying the answer. ADHD-friendly output.',
     references: 'github.com/ayghri/i-have-adhd',
     background: '这是一个专门为 AI 编码助手设计的提示词技能，强制模型先给出结论。',
@@ -184,6 +197,9 @@ const allItems = ref([
     id: 2,
     title: 'bilawalsidhu/gods-eye-view',
     score: 8.0,
+    source: 'github',
+    author: 'bilawalsidhu',
+    time: '9月6日 07:21',
     description: 'A spy satellite simulator in your browser, except the data is real.',
     references: 'github.com/bilawalsidhu/gods-eye-view',
     background: '浏览器里的间谍卫星模拟器，基于真实开放数据构建。',
@@ -197,6 +213,9 @@ const allItems = ref([
     id: 3,
     title: 'Attention Is All You Need (Revisited)',
     score: 9.0,
+    source: 'arxiv',
+    author: 'Vaswani et al.',
+    time: '9月5日 22:10',
     description: 'A foundational paper on Transformer architecture, now with new benchmarks.',
     references: 'arxiv.org/abs/1706.03762',
     background: 'Transformer 架构的奠基论文，近期被重新复现并补充了新的基准测试。',
@@ -210,6 +229,9 @@ const allItems = ref([
     id: 4,
     title: 'Karpathy: "The best way to learn AI is to build."',
     score: 8.2,
+    source: 'x',
+    author: 'karpathy',
+    time: '9月6日 02:30',
     description: 'A thread on practical AI learning strategies from Andrej Karpathy.',
     references: 'x.com/karpathy/status/...',
     background: 'Karpathy 发布了一条关于 AI 学习路径的长推文。',
@@ -223,6 +245,9 @@ const allItems = ref([
     id: 5,
     title: '量子位：大模型推理成本一年下降 90%',
     score: 7.8,
+    source: '量子位',
+    author: '量子位',
+    time: '9月6日 09:00',
     description: 'Industry report on the rapid decline of LLM inference costs.',
     references: 'mp.weixin.qq.com/s/...',
     background: '量子位发布行业报告，梳理过去一年大模型推理成本的变化。',
@@ -236,6 +261,9 @@ const allItems = ref([
     id: 6,
     title: 'A股三大指数集体收涨，创业板指涨超 2%',
     score: 7.5,
+    source: '财联社',
+    author: '财联社',
+    time: '9月6日 15:00',
     description: 'ChiNext index rose over 2% as tech stocks rallied.',
     references: 'cls.cn/...',
     background: '今日 A 股三大指数集体收涨，科技股表现强势。',
@@ -249,6 +277,9 @@ const allItems = ref([
     id: 7,
     title: 'Bitcoin 突破 70,000 美元，ETF 资金持续流入',
     score: 8.0,
+    source: 'CoinDesk',
+    author: 'CoinDesk',
+    time: '9月6日 12:00',
     description: 'Bitcoin broke through $70k as ETF inflows continue.',
     references: 'coindesk.com/...',
     background: '比特币突破 7 万美元关口，现货 ETF 资金持续净流入。',
@@ -262,6 +293,9 @@ const allItems = ref([
     id: 8,
     title: '国务院发布新一轮经济刺激政策',
     score: 8.0,
+    source: '新华社',
+    author: '新华社',
+    time: '9月6日 18:00',
     description: 'State Council announces new round of economic stimulus.',
     references: 'news.cn/...',
     background: '国务院今日发布新一轮经济刺激政策。',
@@ -275,6 +309,9 @@ const allItems = ref([
     id: 9,
     title: '联合国气候大会达成关键协议',
     score: 7.5,
+    source: 'BBC',
+    author: 'BBC',
+    time: '9月6日 20:00',
     description: 'UN climate summit reaches key agreement on emissions.',
     references: 'bbc.com/...',
     background: '联合国气候大会就碳排放目标达成关键协议。',
@@ -288,6 +325,9 @@ const allItems = ref([
     id: 10,
     title: '央行维持 LPR 不变，市场预期稳定',
     score: 7.0,
+    source: '央行',
+    author: '央行',
+    time: '9月6日 09:30',
     description: 'PBOC keeps LPR unchanged, market expectations stable.',
     references: 'pbc.gov.cn/...',
     background: '央行今日公布最新 LPR 报价，维持不变。',
@@ -301,6 +341,9 @@ const allItems = ref([
     id: 11,
     title: '英伟达 Q3 财报超预期，营收同比增长 94%',
     score: 8.8,
+    source: 'NVIDIA',
+    author: 'NVIDIA',
+    time: '9月6日 06:00',
     description: 'NVIDIA Q3 earnings beat expectations, revenue up 94% YoY.',
     references: 'nvidia.com/...',
     background: '英伟达发布 Q3 财报，营收同比增长 94%。',
@@ -314,6 +357,9 @@ const allItems = ref([
     id: 12,
     title: '搞了个 dsh 的 rust 壳小工具，v 友试试水么？',
     score: 7.2,
+    source: 'v2ex',
+    author: 'v2ex',
+    time: '9月6日 10:00',
     description: 'A Rust-based shell tool shared on V2EX.',
     references: 'v2ex.com/t/...',
     background: 'V2EX 网友分享了一个用 Rust 写的 dsh 壳小工具。',
@@ -327,6 +373,9 @@ const allItems = ref([
     id: 13,
     title: 'LinuxDo 社区年度总结：最受欢迎的开源项目',
     score: 7.5,
+    source: 'linuxdo',
+    author: 'linuxdo',
+    time: '9月6日 14:00',
     description: 'Annual summary of most popular open source projects on LinuxDo.',
     references: 'linux.do/t/...',
     background: 'LinuxDo 社区发布年度总结，盘点最受欢迎的开源项目。',
