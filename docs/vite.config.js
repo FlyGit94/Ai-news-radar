@@ -3,6 +3,5 @@ import vue from '@vitejs/plugin-vue'
 
 export default defineConfig({
   plugins: [vue()],
-  // 必须写仓库名，前后都有斜杠
-  base: '/AI-news-radar/', 
+  base: './',   // ← 关键：改成相对路径
 })
