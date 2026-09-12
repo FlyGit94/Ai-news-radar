@@ -4,30 +4,28 @@
     <!-- 顶部吸顶导航 -->
     <header class="sticky top-0 z-50 backdrop-blur-md bg-dark/80 border-b border-white/10">
       <!-- 第一层：日期居中，最大字号 -->
-      <div class="max-w-4xl mx-auto px-6 py-4 text-center">
-        <h1 class="text-3xl font-bold text-white">{{ currentDate }}</h1>
-        <div class="flex items-center justify-center gap-3 mt-1 text-xs text-gray-500">
-          <span>每日简报</span>
-          <span class="text-gray-700">·</span>
-          <button @click="showArchive = true" class="text-blue-400 hover:text-blue-300 transition-colors">
-            历史归档
+      <div class="max-w-4xl mx-auto px-6 pt-6 pb-3 text-center">
+        <h1 class="text-5xl font-bold text-white tracking-tight">{{ currentDate }}</h1>
+        <div class="mt-3">
+          <button @click="showArchive = true" class="inline-flex items-center gap-1 text-xs text-blue-400 hover:text-blue-300 transition-colors">
+            ← 历史归档
           </button>
         </div>
       </div>
 
-      <!-- 第二层：主标签居中 -->
-      <nav class="max-w-4xl mx-auto flex gap-6 px-6 pb-2 text-sm justify-center overflow-x-auto whitespace-nowrap">
+      <!-- 第二层：主标签居中，白条加长 -->
+      <nav class="max-w-4xl mx-auto flex gap-2 px-6 pb-2 text-sm justify-center overflow-x-auto whitespace-nowrap">
         <button 
           v-for="tab in mainTabs" :key="tab.id"
           @click="activeTab = tab.id"
-          :class="['pb-2 transition-colors', activeTab === tab.id ? 'text-white font-bold border-b-2 border-white' : 'text-gray-400 hover:text-white']"
+          :class="['px-4 pb-2 transition-colors border-b-2', activeTab === tab.id ? 'text-white font-bold border-white' : 'text-gray-400 hover:text-white border-transparent']"
         >
           {{ tab.name }} <span class="text-xs text-gray-500 ml-1">{{ tab.count }}</span>
         </button>
       </nav>
 
       <!-- 第三层：子标签居中 -->
-      <div class="max-w-4xl mx-auto sticky top-[130px] z-40 bg-dark/80 backdrop-blur-md px-6 py-2 flex gap-3 justify-center overflow-x-auto whitespace-nowrap">
+      <div class="max-w-4xl mx-auto sticky top-[150px] z-40 bg-dark/80 backdrop-blur-md px-6 py-2 flex gap-3 justify-center overflow-x-auto whitespace-nowrap">
         <button 
           v-for="sub in subTabs" :key="sub.id"
           @click="activeSubTab = sub.id"
@@ -44,19 +42,55 @@
         v-for="item in filteredItems" :key="item.id"
         class="border-b border-white/5 py-6 last:border-0"
       >
-        <h2 class="text-xl font-bold text-white hover:text-blue-400 cursor-pointer transition-colors">
-          {{ item.title }}
-        </h2>
-        <div class="flex items-center gap-3 text-xs text-gray-500 mt-2">
-          <span>{{ item.language }}</span>
-          <span>★ {{ item.stars }}</span>
-          <span v-if="item.todayStars" class="text-green-400">{{ item.todayStars }}</span>
+        <!-- 标题 + 分数 -->
+        <div class="flex items-start gap-3">
+          <h2 class="text-xl font-bold text-orange-400 hover:text-orange-300 cursor-pointer transition-colors leading-snug">
+            {{ item.title }}
+          </h2>
+          <span v-if="item.score" class="shrink-0 bg-orange-500 text-white text-xs font-bold px-2 py-0.5 rounded">
+            {{ item.score }}
+          </span>
         </div>
-        <p class="text-gray-400 text-sm mt-3 leading-relaxed">{{ item.description }}</p>
-        
-        <div v-if="item.chineseIntro" class="mt-4 bg-white/5 border-l-2 border-blue-500 rounded-r-lg p-3 text-sm text-gray-300">
-          <span class="font-bold text-white mr-1">中文介绍</span>
-          {{ item.chineseIntro }}
+
+        <!-- 摘要 -->
+        <p class="text-gray-300 text-sm mt-3 leading-relaxed">{{ item.description }}</p>
+
+        <!-- 元数据行 -->
+        <div class="flex items-center flex-wrap gap-2 text-xs text-gray-500 mt-3">
+          <span>{{ item.source }}</span>
+          <span class="text-gray-700">·</span>
+          <span>{{ item.author }}</span>
+          <span class="text-gray-700">·</span>
+          <span>{{ item.time }}</span>
+          <span class="text-gray-700">·</span>
+          <span class="text-gray-400">{{ item.discussion }}</span>
+        </div>
+
+        <!-- 分段：背景 / 影响 / 社区讨论 -->
+        <div class="mt-4 space-y-3 text-sm text-gray-300">
+          <p v-if="item.background">
+            <span class="text-gray-500 mr-1">「背景」</span>{{ item.background }}
+          </p>
+          <p v-if="item.impact">
+            <span class="text-gray-500 mr-1">「影响」</span>{{ item.impact }}
+          </p>
+          <p v-if="item.community">
+            <span class="text-gray-500 mr-1">「社区讨论」</span>{{ item.community }}
+          </p>
+        </div>
+
+        <!-- 参考链接 -->
+        <div v-if="item.references" class="mt-4">
+          <div class="text-xs text-gray-500 mb-1">参考链接</div>
+          <div class="bg-white/5 border border-white/10 rounded-lg p-3 text-xs text-gray-400">
+            {{ item.references }}
+          </div>
+        </div>
+
+        <!-- 标签 -->
+        <div v-if="item.tags && item.tags.length" class="mt-4 text-xs text-gray-500">
+          <span class="mr-2">标签：</span>
+          <span v-for="tag in item.tags" :key="tag" class="text-blue-400 mr-2">#{{ tag }}</span>
         </div>
       </article>
 
@@ -135,10 +169,8 @@ const subTabsMap = {
   ],
 }
 
-// 当前显示的子标签，根据 activeTab 动态计算
 const subTabs = computed(() => subTabsMap[activeTab.value] || [])
 
-// 切换主标签时，自动把子标签重置到第一个
 watch(activeTab, () => {
   const tabs = subTabsMap[activeTab.value]
   if (tabs && tabs.length > 0) {
@@ -146,179 +178,241 @@ watch(activeTab, () => {
   }
 })
 
-// 模拟数据（之后替换为真实 fetch）
+// ========== 模拟数据 ==========
 const allItems = ref([
-  // ===== 技术动态 =====
+  // ===== 技术动态 / GitHub Trending =====
   {
     id: 1,
     title: 'ayghri/i-have-adhd',
-    language: 'Python',
-    stars: '41,882',
-    todayStars: '3,463 stars today',
+    score: 8.5,
+    source: 'github',
+    author: 'ayghri',
+    time: '9月6日 07:21',
+    discussion: '1.2k stars today',
     description: 'A skill to stop your coding agent from burying the answer. ADHD-friendly output.',
-    chineseIntro: '为 AI 编码助手准备的技能，强制模型先给出结论，而不是把答案埋在冗长的推理过程里。',
+    background: '这是一个专门为 AI 编码助手设计的提示词技能，强制模型先给出结论。',
+    impact: '适合注意力容易分散、只想快速拿到结果的开发者，可接入常见 coding agent 使用。',
+    community: '社区反馈积极，许多人表示这个思路能显著减少 AI 输出中的冗余推理。',
+    references: 'github.com/ayghri/i-have-adhd',
+    tags: ['ai', 'coding-agent', 'prompt'],
     category: 'tech',
     subCategory: 'github'
   },
   {
     id: 2,
     title: 'bilawalsidhu/gods-eye-view',
-    language: 'JavaScript',
-    stars: '27,155',
-    todayStars: '3,680 stars today',
+    score: 8.0,
+    source: 'github',
+    author: 'bilawalsidhu',
+    time: '9月6日 07:21',
+    discussion: '3.6k stars today',
     description: 'A spy satellite simulator in your browser, except the data is real.',
-    chineseIntro: '浏览器里的间谍卫星模拟器：基于真实开放数据，在逼真 3D 地球上做实时空间情报分析。',
+    background: '浏览器里的间谍卫星模拟器，基于真实开放数据构建。',
+    impact: '面向开源情报（OSINT）、地理信息与遥感方向的从业者与爱好者。',
+    community: '社区认为这是 OSINT 领域近期最直观的可视化工具之一。',
+    references: 'github.com/bilawalsidhu/gods-eye-view',
+    tags: ['osint', 'geospatial', '3d'],
     category: 'tech',
     subCategory: 'github'
   },
+
+  // ===== 技术动态 / 热门论文 =====
   {
     id: 3,
     title: 'Attention Is All You Need (Revisited)',
-    language: 'arXiv',
-    stars: '12,000',
-    todayStars: 'Top 1 today',
+    score: 9.0,
+    source: 'arxiv',
+    author: 'Vaswani et al.',
+    time: '9月5日 22:10',
+    discussion: 'Top 1 today',
     description: 'A foundational paper on Transformer architecture, now with new benchmarks.',
-    chineseIntro: 'Transformer 架构奠基论文的最新复现与评测，是理解现代大模型的必读文献。',
+    background: 'Transformer 架构的奠基论文，近期被重新复现并补充了新的基准测试。',
+    impact: '是理解现代大模型（GPT、LLaMA 等）的必读文献。',
+    community: '社区讨论集中在复现细节和新增 benchmark 的公平性上。',
+    references: 'arxiv.org/abs/1706.03762',
+    tags: ['transformer', 'nlp', 'paper'],
     category: 'tech',
     subCategory: 'papers'
   },
+
+  // ===== 技术动态 / X 推文 =====
   {
     id: 4,
-    title: 'Scaling Laws for Neural Language Models',
-    language: 'arXiv',
-    stars: '8,500',
-    todayStars: 'Top 3 today',
-    description: 'Empirical study on how model performance scales with size, data, and compute.',
-    chineseIntro: '关于模型性能随规模、数据、算力变化规律的经典实证研究。',
-    category: 'tech',
-    subCategory: 'papers'
-  },
-  {
-    id: 5,
     title: 'Karpathy: "The best way to learn AI is to build."',
-    language: 'X',
-    stars: '5,200',
-    todayStars: '3,400 likes',
+    score: 8.2,
+    source: 'x',
+    author: 'karpathy',
+    time: '9月6日 02:30',
+    discussion: '3.4k likes',
     description: 'A thread on practical AI learning strategies from Andrej Karpathy.',
-    chineseIntro: 'Karpathy 关于 AI 学习路径的推文串：强调“动手做”比“看论文”更重要。',
+    background: 'Karpathy 发布了一条关于 AI 学习路径的长推文。',
+    impact: '强调“动手做”比“看论文”更重要，推荐从复现小项目开始。',
+    community: '推文下大量开发者分享了自己的学习路线与踩坑经验。',
+    references: 'x.com/karpathy/status/...',
+    tags: ['ai', 'learning', 'karpathy'],
     category: 'tech',
     subCategory: 'twitter'
   },
+
+  // ===== 技术动态 / AI 媒体 =====
   {
-    id: 6,
+    id: 5,
     title: '量子位：大模型推理成本一年下降 90%',
-    language: '微信',
-    stars: 'N/A',
-    todayStars: '今日头条',
+    score: 7.8,
+    source: '量子位',
+    author: '量子位',
+    time: '9月6日 09:00',
+    discussion: '今日头条',
     description: 'Industry report on the rapid decline of LLM inference costs.',
-    chineseIntro: '量子位报道：过去一年大模型推理成本下降 90%，中小团队部署门槛大幅降低。',
+    background: '量子位发布行业报告，梳理过去一年大模型推理成本的变化。',
+    impact: '中小团队部署大模型的门槛大幅降低，应用层创新加速。',
+    community: '读者普遍认为成本下降会推动更多垂直场景落地。',
+    references: 'mp.weixin.qq.com/s/...',
+    tags: ['llm', 'inference', 'cost'],
     category: 'tech',
     subCategory: 'media'
   },
 
   // ===== 市场行情 =====
   {
-    id: 7,
+    id: 6,
     title: 'A股三大指数集体收涨，创业板指涨超 2%',
-    language: '股市',
-    stars: 'N/A',
-    todayStars: '今日收盘',
+    score: 7.5,
+    source: '财联社',
+    author: '财联社',
+    time: '9月6日 15:00',
+    discussion: '今日收盘',
     description: 'ChiNext index rose over 2% as tech stocks rallied.',
-    chineseIntro: '今日 A 股三大指数集体收涨，创业板指领涨，科技股表现强势。',
+    background: '今日 A 股三大指数集体收涨，科技股表现强势。',
+    impact: '市场情绪回暖，资金回流成长板块。',
+    community: '投资者讨论集中在能否持续反弹。',
+    references: 'cls.cn/...',
+    tags: ['a股', '创业板'],
     category: 'market',
     subCategory: 'stocks'
   },
   {
-    id: 8,
+    id: 7,
     title: 'Bitcoin 突破 70,000 美元，ETF 资金持续流入',
-    language: '加密货币',
-    stars: 'N/A',
-    todayStars: '24h +5%',
+    score: 8.0,
+    source: 'CoinDesk',
+    author: 'CoinDesk',
+    time: '9月6日 12:00',
+    discussion: '24h +5%',
     description: 'Bitcoin broke through $70k as ETF inflows continue.',
-    chineseIntro: '比特币突破 7 万美元关口，现货 ETF 资金持续净流入推动上涨。',
+    background: '比特币突破 7 万美元关口，现货 ETF 资金持续净流入。',
+    impact: '机构资金入场推动加密市场整体走强。',
+    community: '交易员对后续走势分歧较大。',
+    references: 'coindesk.com/...',
+    tags: ['bitcoin', 'etf'],
     category: 'market',
     subCategory: 'crypto'
   },
 
   // ===== 时政观察 =====
   {
-    id: 9,
+    id: 8,
     title: '国务院发布新一轮经济刺激政策',
-    language: '国内',
-    stars: 'N/A',
-    todayStars: '今日发布',
+    score: 8.0,
+    source: '新华社',
+    author: '新华社',
+    time: '9月6日 18:00',
+    discussion: '今日发布',
     description: 'State Council announces new round of economic stimulus.',
-    chineseIntro: '国务院今日发布新一轮经济刺激政策，重点支持消费和科技创新。',
+    background: '国务院今日发布新一轮经济刺激政策。',
+    impact: '重点支持消费和科技创新，市场预期改善。',
+    community: '经济学家普遍认为政策力度超预期。',
+    references: 'news.cn/...',
+    tags: ['经济', '政策'],
     category: 'politics',
     subCategory: 'china'
   },
   {
-    id: 10,
+    id: 9,
     title: '联合国气候大会达成关键协议',
-    language: '国际',
-    stars: 'N/A',
-    todayStars: '今日达成',
+    score: 7.5,
+    source: 'BBC',
+    author: 'BBC',
+    time: '9月6日 20:00',
+    discussion: '今日达成',
     description: 'UN climate summit reaches key agreement on emissions.',
-    chineseIntro: '联合国气候大会就碳排放目标达成关键协议，多国承诺加速能源转型。',
+    background: '联合国气候大会就碳排放目标达成关键协议。',
+    impact: '多国承诺加速能源转型。',
+    community: '环保组织认为协议力度仍不够。',
+    references: 'bbc.com/...',
+    tags: ['climate', 'un'],
     category: 'politics',
     subCategory: 'world'
   },
 
   // ===== 财经要点 =====
   {
-    id: 11,
+    id: 10,
     title: '央行维持 LPR 不变，市场预期稳定',
-    language: '宏观',
-    stars: 'N/A',
-    todayStars: '今日公布',
+    score: 7.0,
+    source: '央行',
+    author: '央行',
+    time: '9月6日 09:30',
+    discussion: '今日公布',
     description: 'PBOC keeps LPR unchanged, market expectations stable.',
-    chineseIntro: '央行今日公布最新 LPR 报价，维持不变，符合市场预期。',
+    background: '央行今日公布最新 LPR 报价，维持不变。',
+    impact: '符合市场预期，利率环境保持稳定。',
+    community: '分析师认为短期内降息概率不高。',
+    references: 'pbc.gov.cn/...',
+    tags: ['lpr', '利率'],
     category: 'finance',
     subCategory: 'macro'
   },
   {
-    id: 12,
+    id: 11,
     title: '英伟达 Q3 财报超预期，营收同比增长 94%',
-    language: '公司',
-    stars: 'N/A',
-    todayStars: '盘后 +3%',
+    score: 8.8,
+    source: 'NVIDIA',
+    author: 'NVIDIA',
+    time: '9月6日 06:00',
+    discussion: '盘后 +3%',
     description: 'NVIDIA Q3 earnings beat expectations, revenue up 94% YoY.',
-    chineseIntro: '英伟达发布 Q3 财报，营收同比增长 94%，数据中心业务继续强劲增长。',
+    background: '英伟达发布 Q3 财报，营收同比增长 94%。',
+    impact: '数据中心业务继续强劲增长，AI 需求未见放缓。',
+    community: '投资者关注下一季度指引是否仍能超预期。',
+    references: 'nvidia.com/...',
+    tags: ['nvidia', 'earnings'],
     category: 'finance',
     subCategory: 'company'
   },
 
   // ===== 社区讨论 =====
   {
-    id: 13,
+    id: 12,
     title: '搞了个 dsh 的 rust 壳小工具，v 友试试水么？',
-    language: 'V2EX',
-    stars: 'N/A',
-    todayStars: '3 回复',
+    score: 7.2,
+    source: 'v2ex',
+    author: 'v2ex',
+    time: '9月6日 10:00',
+    discussion: '3 回复',
     description: 'A Rust-based shell tool shared on V2EX.',
-    chineseIntro: 'V2EX 网友分享了一个用 Rust 写的 dsh 壳小工具，欢迎试用。',
+    background: 'V2EX 网友分享了一个用 Rust 写的 dsh 壳小工具。',
+    impact: '适合喜欢折腾终端工具的开发者。',
+    community: '回复中有人建议加入更多 shell 兼容性。',
+    references: 'v2ex.com/t/...',
+    tags: ['rust', 'shell'],
     category: 'community',
     subCategory: 'v2ex'
   },
   {
-    id: 14,
-    title: 'Google Search Impact 效果终于起来了',
-    language: 'V2EX',
-    stars: 'N/A',
-    todayStars: '3 回复',
-    description: 'Discussion on Google Search Impact results.',
-    chineseIntro: 'V2EX 讨论：Google Search Impact 的效果终于开始显现。',
-    category: 'community',
-    subCategory: 'v2ex'
-  },
-  {
-    id: 15,
+    id: 13,
     title: 'LinuxDo 社区年度总结：最受欢迎的开源项目',
-    language: 'LinuxDo',
-    stars: 'N/A',
-    todayStars: '4 回复',
+    score: 7.5,
+    source: 'linuxdo',
+    author: 'linuxdo',
+    time: '9月6日 14:00',
+    discussion: '4 回复',
     description: 'Annual summary of most popular open source projects on LinuxDo.',
-    chineseIntro: 'LinuxDo 社区发布年度总结，盘点最受欢迎的开源项目。',
+    background: 'LinuxDo 社区发布年度总结，盘点最受欢迎的开源项目。',
+    impact: '为开发者提供了新一年的学习与选型参考。',
+    community: '社区成员对榜单排名有不同看法。',
+    references: 'linux.do/t/...',
+    tags: ['opensource', 'linux'],
     category: 'community',
     subCategory: 'linuxdo'
   },
@@ -330,7 +424,6 @@ const filteredItems = computed(() => {
   )
 })
 
-// 生成归档日期列表
 const archiveDates = Array.from({ length: 30 }, (_, i) => {
   const d = new Date()
   d.setDate(d.getDate() - i)
