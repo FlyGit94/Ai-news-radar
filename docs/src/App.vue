@@ -3,7 +3,6 @@
 
     <!-- 顶部吸顶导航 -->
     <header class="sticky top-0 z-50 backdrop-blur-md bg-dark/80 border-b border-white/10">
-      <!-- 第一层：日期居中 -->
       <div class="max-w-4xl mx-auto px-6 pt-6 pb-3 text-center">
         <h1 class="text-5xl font-bold text-white tracking-tight">{{ currentDate }}</h1>
         <div class="mt-3 flex justify-center">
@@ -13,7 +12,6 @@
         </div>
       </div>
 
-      <!-- 第二层：主标签居中 -->
       <nav class="max-w-4xl mx-auto flex gap-2 px-6 pb-2 text-base justify-center overflow-x-auto whitespace-nowrap">
         <button
           v-for="tab in mainTabs" :key="tab.id"
@@ -24,7 +22,6 @@
         </button>
       </nav>
 
-      <!-- 第三层：子标签居中 -->
       <div class="max-w-4xl mx-auto sticky top-[150px] z-40 bg-dark/80 backdrop-blur-md px-6 py-2 flex gap-3 justify-center overflow-x-auto whitespace-nowrap">
         <button
           v-for="sub in subTabs" :key="sub.id"
@@ -42,7 +39,7 @@
         v-for="item in filteredItems" :key="item.id"
         class="border-b-2 border-white/20 py-8 last:border-0"
       >
-        <!-- 标题 + 分数（水平中线对齐） -->
+        <!-- 标题 + 分数 -->
         <div class="flex items-center gap-3">
           <h2 class="text-2xl font-bold text-orange-400 hover:text-orange-300 cursor-pointer transition-colors leading-snug">
             {{ item.title }}
@@ -53,41 +50,40 @@
         </div>
 
         <!-- 摘要 -->
-        <p class="text-gray-300 text-base mt-3 leading-relaxed">{{ item.description }}</p>
+        <p class="text-gray-200 text-base mt-3 leading-relaxed">{{ item.description }}</p>
 
-        <!-- 参考链接（左侧带白色竖条，取代原来元数据行） -->
-        <div v-if="item.references" class="mt-4 border-l-2 border-white rounded-r-lg bg-white/5 px-4 py-3">
-          <a :href="'https://' + item.references" target="_blank" class="text-base text-blue-400 hover:text-blue-300 transition-colors break-all">
-            {{ item.references }}
+        <!-- 分段：背景 / 影响 / 社区讨论 -->
+        <div class="mt-4 space-y-3 text-base text-gray-200">
+          <p v-if="item.background">
+            <span class="text-gray-400 mr-1">「背景」</span>{{ item.background }}
+          </p>
+          <p v-if="item.impact">
+            <span class="text-gray-400 mr-1">「影响」</span>{{ item.impact }}
+          </p>
+          <p v-if="item.community">
+            <span class="text-gray-400 mr-1">「社区讨论」</span>{{ item.community }}
+          </p>
+        </div>
+
+        <!-- 参考链接（在社区讨论和标签之间，只显示“参考链接”四个字） -->
+        <div v-if="item.references" class="mt-4 border-l-2 border-white rounded-lg bg-white/5 border border-white/10 px-4 py-3">
+          <a :href="'https://' + item.references" target="_blank" :title="item.references" class="text-base text-gray-300 hover:text-white transition-colors">
+            参考链接
           </a>
         </div>
 
-        <!-- 分段：背景 / 影响 / 社区讨论 -->
-        <div class="mt-4 space-y-3 text-base text-gray-300">
-          <p v-if="item.background">
-            <span class="text-gray-500 mr-1">「背景」</span>{{ item.background }}
-          </p>
-          <p v-if="item.impact">
-            <span class="text-gray-500 mr-1">「影响」</span>{{ item.impact }}
-          </p>
-          <p v-if="item.community">
-            <span class="text-gray-500 mr-1">「社区讨论」</span>{{ item.community }}
-          </p>
-        </div>
-
-        <!-- 标签（带浅色框，离正文更近） -->
+        <!-- 标签（灰色底框，离正文更近） -->
         <div v-if="item.tags && item.tags.length" class="mt-2 flex items-center flex-wrap gap-2">
-          <span class="text-sm text-gray-500">标签：</span>
+          <span class="text-sm text-gray-400">标签：</span>
           <span
             v-for="tag in item.tags" :key="tag"
-            class="bg-orange-500/10 text-orange-200 text-sm px-3 py-1 rounded-md"
+            class="bg-white/5 border border-white/10 text-gray-200 text-sm px-3 py-1 rounded-md"
           >
             #{{ tag }}
           </span>
         </div>
       </article>
 
-      <!-- 无内容时的提示 -->
       <div v-if="filteredItems.length === 0" class="text-center py-20 text-gray-600">
         暂无内容
       </div>
