@@ -33,6 +33,8 @@ from .ai.enricher import ContentEnricher, EnrichmentBatchResult
 from .ai.tokens import get_usage_snapshot
 from .processing import ProfileRegistry
 
+# 北京时间时区（UTC+8）
+BEIJING_TZ = timezone(timedelta(hours=8))
 
 _TRACKING_QUERY_PARAMETERS = {
     "_ga",
@@ -292,8 +294,7 @@ class HorizonOrchestrator:
             await self.enrich_items(important_items)
 
             # 7. Generate and save daily summaries for each configured language
-            beijing_tz = timezone(timedelta(hours=8))
-            today = datetime.now(beijing_tz).strftime("%Y-%m-%d")
+            today = datetime.now(BEIJING_TZ).strftime("%Y-%m-%d")
             for lang in self.config.ai.languages:
                 summarizer = DailySummarizer(
                     profile_names=self.profiles.names,
@@ -354,7 +355,7 @@ class HorizonOrchestrator:
             # Send webhook failure notification if configured
             if self.webhook_notifier:
                 await self.webhook_notifier.send_failure(
-                    date=datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+                    date=datetime.now(BEIJING_TZ).strftime("%Y-%m-%d"),
                     error_message=str(e),
                 )
 
@@ -362,10 +363,10 @@ class HorizonOrchestrator:
 
     def _determine_time_window(self, force_hours: int = None) -> datetime:
         if force_hours:
-            since = datetime.now(timezone.utc) - timedelta(hours=force_hours)
+            since = datetime.now(BEIJING_TZ) - timedelta(hours=force_hours)
         else:
             hours = self.config.collection.time_window_hours
-            since = datetime.now(timezone.utc) - timedelta(hours=hours)
+            since = datetime.now(BEIJING_TZ) - timedelta(hours=hours)
         return since
 
     async def fetch_all_sources(self, since: datetime) -> List[ContentItem]:
