@@ -29,11 +29,11 @@
         "threshold": 7.0,
         "topic_dedup": true
       },
-        "politics": {
+      "politics": {
         "threshold": 7.0,
         "topic_dedup": true
       },
-        "art-news": {
+      "art-news": {
         "threshold": 7.0,
         "topic_dedup": true
       }
@@ -80,14 +80,14 @@
         "name": "Simon Willison",
         "url": "https://simonwillison.net/atom/everything/",
         "enabled": true,
-        "category": "ai-tools",
+        "category": "tech-news",
         "profile": "tech-news"
       },
       {
         "name": "vLLM Blog",
         "url": "https://vllm.ai/blog/rss.xml",
         "enabled": true,
-        "category": "llm-inference",
+        "category": "tech-news",
         "profile": "tech-blog",
         "content_extractor": "trafilatura"
       },
@@ -95,7 +95,7 @@
         "name": "Sean Goedecke",
         "url": "https://www.seangoedecke.com/rss.xml",
         "enabled": true,
-        "category": "software-engineering",
+        "category": "tech-news",
         "profile": "tech-blog",
         "content_extractor": "trafilatura"
       },
@@ -103,7 +103,7 @@
         "name": "CNBC Finance",
         "url": "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=10000664",
         "enabled": true,
-        "category": "finance",
+        "category": "finance-news",
         "profile": "finance-news",
         "content_extractor": "trafilatura"
       },
@@ -111,56 +111,56 @@
         "name": "The Economist",
         "url": "https://medium.com/feed/the-economist",
         "enabled": true,
-        "category": "finance",
+        "category": "finance-news",
         "profile": "finance-news"
       },
       {
         "name": "Bloomberg",
         "url": "https://feeds.bloomberg.com/markets/news.rss",
         "enabled": true,
-        "category": "finance",
+        "category": "finance-news",
         "profile": "finance-news"
       },
       {
         "name": "WSJ",
         "url": "https://feeds.a.dj.com/rss/RSSMarketsMain.xml",
         "enabled": true,
-        "category": "finance",
+        "category": "finance-news",
         "profile": "finance-news"
       },
       {
         "name": "FT",
         "url": "https://www.ft.com/companies/technology/rss",
         "enabled": true,
-        "category": "finance",
+        "category": "finance-news",
         "profile": "finance-news"
       },
       {
         "name": "BBC Business",
         "url": "https://feeds.bbci.co.uk/news/business/rss.xml",
         "enabled": true,
-        "category": "finance",
+        "category": "finance-news",
         "profile": "finance-news"
       },
       {
         "name": "GitHub Trending - Daily",
         "url": "https://mshibanami.github.io/GitHubTrendingRSS/daily/all.xml",
         "enabled": true,
-        "category": "github-trending",
+        "category": "tech-news",
         "profile": "tech-news"
       },
       {
         "name": "Semianalysis",
         "url": "https://newsletter.semianalysis.com/feed",
         "enabled": true,
-        "category": "semiconductors",
+        "category": "tech-news",
         "profile": "tech-news"
       },
       {
         "name": "LWN.net",
         "url": "https://lwn.net/headlines/full_text?key=${LWN_KEY}",
         "enabled": true,
-        "category": "linux-kernel",
+        "category": "tech-news",
         "profile": "tech-news"
       },
       {
@@ -291,22 +291,22 @@
       "art-news"
     ],
     "category_groups": {
-          "技术动态": {
-            "categories": ["ai-tools", "llm-inference", "software-engineering", "github-trending", "semiconductors", "linux-kernel"],
-            "limit": 8
-        },
-          "财经要点": {
-            "categories": ["finance"],
-            "limit": 8
-        },
-          "时政观察":{
-            "categories": ["world-news"],
-            "limit": 8
-        },
-          "艺术新闻":{
-            "categories": ["art-news"],
-            "limit": 8
-        }
+      "技术动态": {
+        "categories": ["tech-news"],
+        "limit": 8
+      },
+      "财经要点": {
+        "categories": ["finance-news"],
+        "limit": 8
+      },
+      "时政观察": {
+        "categories": ["world-news"],
+        "limit": 8
+      },
+      "艺术新闻": {
+        "categories": ["art-news"],
+        "limit": 8
+      }
     },
     "default_group": "other",
     "default_group_limit": null
