@@ -57,6 +57,7 @@ Ai-news-radar/
 │   └── main.py                        # CLI 入口
 │
 ├── tests/                             # Horizon 单元测试
+├── .gitignore                         # Git 忽略规则
 ├── pyproject.toml                     # Python 依赖
 ├── uv.lock                            # 依赖锁定
 └── README.md
