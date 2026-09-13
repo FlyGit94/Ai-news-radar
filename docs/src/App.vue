@@ -84,7 +84,7 @@
         <!-- 参考链接 -->
         <div v-if="item.references" class="mt-4">
           <a :href="'https://' + item.references" target="_blank" :title="item.references"
-             class="block bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-base text-gray-300 hover:text-white hover:bg-white/10 transition-colors">
+             class="block border border-white/10 rounded-lg px-3 py-2 text-sm text-gray-300 hover:text-white hover:border-white/20 transition-colors">
             参考链接
           </a>
         </div>
