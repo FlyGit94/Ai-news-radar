@@ -246,6 +246,13 @@ const loadIndex = async () => {
     const res = await fetch('./assets/data/index.json')
     if (res.ok) {
       archiveReports.value = await res.json()
+      if (archiveReports.value.length > 0) {
+        const params = new URLSearchParams(window.location.search)
+        const dateParam = params.get('date')
+        if (!dateParam || !/^\d{4}-\d{2}-\d{2}$/.test(dateParam)) {
+          currentDate.value = archiveReports.value[0].date
+        }
+      }
     }
   } catch (e) {
     console.error('加载归档索引失败', e)
