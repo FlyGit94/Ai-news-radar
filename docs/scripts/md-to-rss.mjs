@@ -4,6 +4,9 @@ import path from 'path'
 const RAW_DIR = path.resolve('docs/public/data/raw')
 const OUT_FILE = path.resolve('docs/public/assets/data/feed.xml')
 
+// 确保输出目录存在
+fs.mkdirSync(path.dirname(OUT_FILE), { recursive: true })
+
 // ⚠️ 修改成你自己的站点信息
 const SITE_URL = 'https://flyigit94.github.io/Ai-news-radar'
 const FEED_TITLE = '每日简报'
