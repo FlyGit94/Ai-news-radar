@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-const RAW_DIR = path.resolve('public/data/raw')
+const RAW_DIR = path.resolve('docs/public/data/raw')
 const OUT_FILE = path.resolve('docs/public/data/feed.xml')
 
 // ⚠️ 修改成你自己的站点信息
