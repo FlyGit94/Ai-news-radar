@@ -292,7 +292,7 @@
     ],
     "category_groups": {
           "技术动态": {
-            "categories": ["tech-news", "tech-blog"],
+            "categories": ["ai-tools", "llm-inference", "software-engineering", "github-trending", "semiconductors", "linux-kernel"],
             "limit": 8
         },
           "财经要点": {
