@@ -10,7 +10,6 @@ const categoryMap = {
   '财经新闻': { category: 'finance', subCategory: 'stocks' },
   '时政观察': { category: 'politics', subCategory: 'china' },
   '市场行情': { category: 'market', subCategory: 'stocks' },
-  '社区讨论': { category: 'community', subCategory: 'v2ex' },
 }
 
 function parseMarkdown(md) {
