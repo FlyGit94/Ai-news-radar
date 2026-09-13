@@ -116,7 +116,7 @@
       </div>
     </main>
 
-    <!-- 归档列表（只通过点击日期 / Latest report / Esc 键关闭） -->
+    <!-- 归档列表（只能通过点击日期 / Latest report 关闭） -->
     <div
       v-if="showArchive"
       class="fixed inset-0 z-[60] bg-white/95 dark:bg-dark/95 backdrop-blur-lg overflow-y-auto"
@@ -190,13 +190,11 @@ onMounted(async () => {
   applyTheme()
 
   window.addEventListener('scroll', handleScroll, { passive: true })
-  window.addEventListener('keydown', handleEsc)
   await Promise.all([loadData(), loadIndex()])
 })
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
-  window.removeEventListener('keydown', handleEsc)
 })
 
 const loadData = async (date) => {
@@ -241,13 +239,6 @@ const switchDate = async (date) => {
 
 const handleScroll = () => {
   scrolled.value = window.innerWidth < 768 && window.scrollY > 40
-}
-
-// ====== Esc 键关闭归档 ======
-const handleEsc = (e) => {
-  if (e.key === 'Escape' && showArchive.value) {
-    showArchive.value = false
-  }
 }
 
 // ====== 主标签（动态 count，只显示有内容的） ======
