@@ -296,11 +296,11 @@
             "limit": 8
         },
           "财经要点": {
-            "categories": ["finance-news"],
+            "categories": ["finance"],
             "limit": 8
         },
           "时政观察":{
-            "categories": ["politics"],
+            "categories": ["world-news"],
             "limit": 8
         },
           "艺术新闻":{
