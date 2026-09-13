@@ -124,7 +124,7 @@
       <div class="max-w-3xl mx-auto py-10 px-6">
         <!-- 标题 -->
         <div class="mb-8">
-          <h1 class="text-2xl font-bold text-black dark:text-white">每日简报</h1>
+          <h1 class="text-2xl font-bold text-black dark:text-white">每周简报</h1>
         </div>
 
         <p class="text-gray-500 text-base mb-6">
