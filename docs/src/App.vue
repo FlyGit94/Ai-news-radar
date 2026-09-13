@@ -243,12 +243,24 @@ const handleScroll = () => {
 }
 
 // ====== 主标签（动态 count） ======
-const mainTabs = computed(() => [
-  { id: 'tech', name: '科技新闻', count: allItems.value.filter(i => i.category === 'tech').length },
-  { id: 'finance', name: '财经要点', count: allItems.value.filter(i => i.category === 'finance').length },
-  { id: 'politics', name: '时政观察', count: allItems.value.filter(i => i.category === 'politics').length },
-  { id: 'art', name: '艺术新闻', count: allItems.value.filter(i => i.category === 'art').length },
-])
+const mainTabs = computed(() => {
+  const tabs = [
+    { id: 'tech', name: '科技新闻', count: allItems.value.filter(i => i.category === 'tech').length },
+    { id: 'finance', name: '财经要点', count: allItems.value.filter(i => i.category === 'finance').length },
+    { id: 'politics', name: '时政观察', count: allItems.value.filter(i => i.category === 'politics').length },
+    { id: 'art', name: '艺术新闻', count: allItems.value.filter(i => i.category === 'art').length },
+  ]
+  return tabs.filter(t => t.count > 0)
+})
+
+// 自动纠正 activeTab，防止落到被隐藏的标签上
+watch(mainTabs, (tabs) => {
+  if (tabs.length === 0) return
+  const stillVisible = tabs.some(t => t.id === activeTab.value)
+  if (!stillVisible) {
+    activeTab.value = tabs[0].id
+  }
+}, { immediate: true })
 
 // ====== 子标签（按 source 动态生成） ======
 const subTabs = computed(() => {
