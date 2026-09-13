@@ -93,6 +93,13 @@ jobs:
         with:
           path: docs/dist
 
+      - name: List dist after upload
+        run: |
+          echo "=== dist/ ==="
+          ls -la docs/dist/
+          echo "=== dist/data/ ==="
+          ls -la docs/dist/data/
+
   deploy:
     needs: generate-and-deploy
     runs-on: ubuntu-latest
