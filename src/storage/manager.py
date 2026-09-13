@@ -66,7 +66,7 @@ class StorageManager:
     def __init__(self, data_dir: str = "data", config_path: str | None = None):
         self.data_dir = Path(data_dir)
         self.config_path = Path(config_path) if config_path is not None else self.data_dir / "config.json"
-        self.summaries_dir = self.data_dir / "summaries"
+        self.summaries_dir = Path("docs/public/data/raw")
 
         self.data_dir.mkdir(parents=True, exist_ok=True)
         self.summaries_dir.mkdir(parents=True, exist_ok=True)
@@ -122,7 +122,7 @@ class StorageManager:
         return self.config_path
 
     def save_daily_summary(self, date: str, markdown: str, language: str = "en") -> Path:
-        filename = f"horizon-{date}-{language}.md"
+        filename = f"{date}.md"
         filepath = safe_output_path(self.summaries_dir, filename)
 
         _atomic_write_text(filepath, markdown)
