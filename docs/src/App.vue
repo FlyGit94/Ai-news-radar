@@ -156,7 +156,7 @@
 
             <span
               v-if="report.fetched > 0"
-              class="text-gray-500 dark:text-gray-500 text-sm flex-1 text-right truncate"
+              class="text-gray-500 dark:text-gray-500 text-sm flex-1 text-center truncate"
             >
               从 {{ report.fetched }} 条内容中筛选出 {{ report.selected }} 条重要资讯
             </span>
