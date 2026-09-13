@@ -4,12 +4,15 @@ import path from 'path'
 const RAW_DIR = path.resolve('public/data/raw')
 const OUT_DIR = path.resolve('public/data')
 
-// 分类映射：md 里的中文分类 → 前端用的 category / subCategory
+// 分类映射：只保留三种分类
 const categoryMap = {
   '科技新闻': { category: 'tech', subCategory: 'github' },
   '财经新闻': { category: 'finance', subCategory: 'stocks' },
   '时政观察': { category: 'politics', subCategory: 'china' },
 }
+
+// 默认兜底分类（md 里出现未映射分类时使用）
+const DEFAULT_CATEGORY = { category: 'tech', subCategory: 'github' }
 
 function parseMarkdown(md) {
   const lines = md.split('\n')
@@ -32,7 +35,7 @@ function parseMarkdown(md) {
     const anchorMatch = line.match(/^<a id="(item-[^"]+)"><\/a>/)
     if (anchorMatch) {
       if (current) items.push(current)
-      const mapped = categoryMap[currentCategoryRaw] || { category: 'tech', subCategory: 'github' }
+      const mapped = categoryMap[currentCategoryRaw] || DEFAULT_CATEGORY
       current = {
         id: anchorMatch[1],
         category: mapped.category,
@@ -125,12 +128,10 @@ const files = fs.readdirSync(RAW_DIR).filter(f => f.endsWith('.md'))
 
 if (files.length === 0) {
   console.log('⚠️ public/data/raw/ 目录下没有 .md 文件')
-  // 仍然生成一个空的 index.json
   fs.writeFileSync(path.join(OUT_DIR, 'index.json'), JSON.stringify([], null, 2), 'utf-8')
   process.exit(0)
 }
 
-// 收集所有日期（用于生成 index.json）
 const availableDates = []
 
 for (const file of files) {
