@@ -3,6 +3,7 @@ name: Weekly Horizon Summary
 on:
   # schedule:
   #   - cron: '30 22 * * 0'
+  # cron-job触发
   workflow_dispatch:
 
 permissions:
