@@ -71,6 +71,9 @@ jobs:
       - name: Generate RSS Feed
         run: node docs/scripts/md-to-rss.mjs
 
+      - name: List public/data files
+        run: ls -la docs/public/data/
+
       - name: Build frontend
         run: npm run build
         working-directory: docs
