@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 const RAW_DIR = path.resolve('public/data/raw')
-const OUT_DIR = path.resolve('public/data')
+const OUT_DIR = path.resolve('docs/public/data')
 
 // 分类映射：只保留四种分类
 const categoryMap = {
