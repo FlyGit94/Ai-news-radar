@@ -26,12 +26,10 @@
           class="mr-2 p-1.5 rounded-md text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-colors shrink-0"
           :title="isDark ? '切换到亮色' : '切换到暗色'"
         >
-          <!-- 太阳图标：暗色模式下显示 -->
           <svg v-if="isDark" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <circle cx="12" cy="12" r="4" />
             <path stroke-linecap="round" d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
           </svg>
-          <!-- 月亮图标：亮色模式下显示 -->
           <svg v-else xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
           </svg>
@@ -118,12 +116,22 @@
       </div>
     </main>
 
-    <!-- 归档列表 -->
-    <div v-if="showArchive" class="fixed inset-0 z-[60] bg-white/95 dark:bg-dark/95 backdrop-blur-lg overflow-y-auto">
+    <!-- 归档列表：点遮罩空白处关闭 -->
+    <div
+      v-if="showArchive"
+      @click.self="showArchive = false"
+      class="fixed inset-0 z-[60] bg-white/95 dark:bg-dark/95 backdrop-blur-lg overflow-y-auto"
+    >
       <div class="max-w-3xl mx-auto py-10 px-6">
+        <!-- 标题 + 返回按钮（去掉叉号，改为文字按钮） -->
         <div class="flex items-center justify-between mb-8">
           <h1 class="text-2xl font-bold text-black dark:text-white">每日简报</h1>
-          <button @click="showArchive = false" class="text-gray-400 hover:text-black dark:hover:text-white text-xl leading-none">✕</button>
+          <button
+            @click="showArchive = false"
+            class="text-sm text-gray-500 hover:text-black dark:hover:text-white transition-colors"
+          >
+            ← 返回
+          </button>
         </div>
 
         <p class="text-gray-500 text-base mb-6">{{ archiveDates.length }} reports · newest first · generated {{ currentDate }}</p>
