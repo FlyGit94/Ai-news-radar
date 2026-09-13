@@ -1,22 +1,29 @@
 name: Daily Horizon Summary
 
 on:
-  # schedule:
+  schedule:
     # 北京时间每周一早上 06:30 触发（UTC 周日 22:30）
-  #  - cron: '30 22 * * 0'
+    - cron: '30 22 * * 0'
   workflow_dispatch:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
-  generate-summary:
+  generate-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # ===== 1. 跑 Horizon 生成 md =====
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -38,6 +45,7 @@ jobs:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
         run: uv run horizon --hours 24
 
+      # ===== 2. 把生成的 md 提交回 main =====
       - name: Commit generated summaries
         run: |
           git config user.name "github-actions"
@@ -45,3 +53,45 @@ jobs:
           git add docs/public/data/raw/
           git commit -m "chore: add weekly summary $(date +%Y-%m-%d)" || echo "no changes to commit"
           git push
+
+      # ===== 3. 前端构建 =====
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install frontend deps
+        run: npm install
+        working-directory: docs
+
+      - name: Generate JSON from Markdown
+        run: node scripts/md-to-json.mjs
+        working-directory: docs
+
+      - name: Generate RSS Feed
+        run: node scripts/md-to-rss.mjs
+        working-directory: docs
+
+      - name: Build frontend
+        run: npm run build
+        working-directory: docs
+
+      # ===== 4. 部署到 GitHub Pages =====
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/dist
+
+  deploy:
+    needs: generate-and-deploy
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
