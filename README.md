@@ -14,7 +14,7 @@ Ai-news-radar/
 │
 ├── .github/
 │   └── workflows/
-│       └── daily-summary.yml          # GitHub Actions 工作流（跑 Horizon + 构建 + 部署）
+│       └── weekly-summary.yml          # GitHub Actions 工作流（跑 Horizon + 构建 + 部署）
 │
 ├── data/                              # Horizon 的配置和数据
 │   ├── config.github.json             # 主配置（源、AI、分组、webhook）
