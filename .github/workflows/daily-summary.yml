@@ -2,21 +2,15 @@ name: Daily Horizon Summary
 
 on:
   schedule:
-    # 北京时间每周六早上 06:30 触发（UTC 周五 22:30）
-    - cron: '30 22 * * 5'
-  workflow_dispatch:      # Allow manual trigger
+    # 北京时间每周一早上 06:30 触发（UTC 周日 22:30）
+    - cron: '30 22 * * 0'
+  workflow_dispatch:
 
 permissions:
   contents: write
-  pages: write
-  id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
 
 jobs:
-  daily-summary:
+  generate-summary:
     runs-on: ubuntu-latest
 
     steps:
@@ -36,52 +30,18 @@ jobs:
       - name: Install Python dependencies
         run: uv sync
 
-      # 如果你的 languages 写在 config.github.json 里，保留这一步
       - name: Prepare GitHub Actions config
         run: cp data/config.github.json data/config.json
 
       - name: Run Horizon
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
-        run: uv run horizon --hours 24
+        run: uv run horizon --hours 168
 
-      # ===== 前端构建部分 =====
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Install frontend deps
-        run: npm install
-        working-directory: docs
-
-      - name: Generate JSON from Markdown
-        run: node scripts/md-to-json.mjs
-        working-directory: docs
-
-      - name: Generate RSS Feed
-        run: node scripts/md-to-rss.mjs
-        working-directory: docs
-
-      - name: Build frontend
-        run: npm run build
-        working-directory: docs
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: docs/dist
-
-  deploy:
-    needs: daily-summary
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Commit generated summaries
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add docs/public/data/raw/
+          git commit -m "chore: add weekly summary $(date +%Y-%m-%d)" || echo "no changes to commit"
+          git push
