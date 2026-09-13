@@ -3,7 +3,6 @@
 
     <!-- 顶部吸顶导航 -->
     <header class="sticky top-0 z-50 backdrop-blur-md bg-dark/80 border-b border-white/10">
-
       <!-- 第一层：日期 + 历史归档（滑动时收起，仅手机端） -->
       <div
         class="max-w-4xl mx-auto text-center overflow-hidden transition-all duration-300 ease-out"
@@ -48,7 +47,7 @@
         v-for="item in filteredItems" :key="item.id"
         class="border-b-2 border-white/20 py-8 last:border-0"
       >
-        <!-- 标题 + 评分（水平中线严格对齐，评分盒轻微下移） -->
+        <!-- 标题 + 评分 -->
         <div class="flex items-center gap-2">
           <h2 class="text-2xl font-bold text-orange-400 hover:text-orange-300 cursor-pointer transition-colors leading-snug">
             {{ item.title }}
@@ -115,22 +114,22 @@
     <!-- 归档列表 -->
     <div v-if="showArchive" class="fixed inset-0 z-[60] bg-dark/95 backdrop-blur-lg overflow-y-auto">
       <div class="max-w-3xl mx-auto py-10 px-6">
-        <div class="flex justify-between items-center mb-8">
-          <h1 class="text-2xl font-bold text-white">daily-brief — archive</h1>
-          <button
-            @click="showArchive = false"
-            class="flex items-center gap-1 px-4 py-2 rounded-lg bg-white/10 text-gray-300 hover:bg-white/20 hover:text-white transition-colors"
-          >
-            ← 返回
-          </button>
+        <!-- 标题：改成“每日简报” -->
+        <div class="mb-8">
+          <h1 class="text-2xl font-bold text-white">每日简报</h1>
         </div>
+
         <p class="text-gray-500 text-base mb-6">30 reports · newest first · generated {{ currentDate }}</p>
-        <a href="#" class="block bg-white/5 rounded-lg p-4 mb-8 text-base text-blue-400 hover:bg-white/10 transition-colors">
+
+        <!-- Latest report 跳回首页 -->
+        <a href="./" class="block bg-white/5 rounded-lg p-4 mb-8 text-base text-blue-400 hover:bg-white/10 transition-colors">
           → Latest report ({{ currentDate }})
         </a>
+
+        <!-- 日期列表：可点击，跳回首页 -->
         <ul class="divide-y divide-white/10">
           <li v-for="date in archiveDates" :key="date" class="flex justify-between py-3">
-            <a href="#" class="text-gray-300 hover:text-white transition-colors text-base">{{ date }}</a>
+            <a href="./" class="text-gray-300 hover:text-white transition-colors text-base">{{ date }}</a>
             <span class="text-gray-600 text-sm">{{ Math.floor(Math.random() * 50 + 100) }} KB</span>
           </li>
         </ul>
