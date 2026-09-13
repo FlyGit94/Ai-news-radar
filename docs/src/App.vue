@@ -2,7 +2,7 @@
   <div class="min-h-screen bg-dark text-gray-200">
 
     <!-- 顶部吸顶导航 -->
-    <header class="sticky top-0 z-50 backdrop-blur-md bg-dark/80 border-b border-white/10">
+    <header class="sticky top-0 z-50 border-b border-white/10 bg-dark md:backdrop-blur-md md:bg-dark/80">
       <!-- 第一层：日期 + 历史归档（滑动时收起，仅手机端） -->
       <div
         class="max-w-4xl mx-auto text-center overflow-hidden transition-all duration-300 ease-out"
