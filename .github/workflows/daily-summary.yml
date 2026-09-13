@@ -72,10 +72,6 @@ jobs:
         run: node scripts/md-to-rss.mjs
         working-directory: docs
 
-      - name: List public/data files
-        run: ls -la public/data/
-        working-directory: docs
-
       - name: Build frontend
         run: npm run build
         working-directory: docs
