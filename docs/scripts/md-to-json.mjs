@@ -12,7 +12,7 @@ const categoryMap = {
   '科技新闻': { category: 'tech', subCategory: 'github' },
   '财经新闻': { category: 'finance', subCategory: 'stocks' },
   '时政观察': { category: 'politics', subCategory: 'china' },
-  '艺术新闻': { category: 'art', subCategory: 'general' },
+  '当代艺术': { category: 'art', subCategory: 'general' },
 }
 
 // 默认兜底分类
