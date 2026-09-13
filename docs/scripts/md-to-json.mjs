@@ -7,7 +7,10 @@ const OUT_DIR = path.resolve('public/data')
 // 分类映射：md 里的中文分类 → 前端用的 category / subCategory
 const categoryMap = {
   '科技新闻': { category: 'tech', subCategory: 'github' },
-  '财经新闻': { category: 'market', subCategory: 'stocks' },
+  '财经新闻': { category: 'finance', subCategory: 'stocks' },
+  '时政观察': { category: 'politics', subCategory: 'china' },
+  '市场行情': { category: 'market', subCategory: 'stocks' },
+  '社区讨论': { category: 'community', subCategory: 'v2ex' },
 }
 
 function parseMarkdown(md) {
