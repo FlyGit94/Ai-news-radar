@@ -41,7 +41,7 @@
         <button
           v-for="tab in mainTabs" :key="tab.id"
           @click="activeTab = tab.id"
-          :class="['px-4 pb-2 transition-colors border-b-2', activeTab === tab.id ? 'text-black dark:text-white font-bold border-black dark:border-white' : 'text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white border-transparent']"
+          :class="['px-4 pb-2 transition-colors border-b-2 shrink-0', activeTab === tab.id ? 'text-black dark:text-white font-bold border-black dark:border-white' : 'text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white border-transparent']"
         >
           {{ tab.name }} <span class="text-sm text-gray-500 ml-1">{{ tab.count }}</span>
         </button>
@@ -159,7 +159,6 @@ import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 const currentDate = ref('2026-09-13')
 const showArchive = ref(false)
 const activeTab = ref('tech')
-const activeSubTab = ref('github')
 const scrolled = ref(false)
 
 // ====== 主题切换 ======
@@ -232,7 +231,6 @@ const switchDate = async (date) => {
   }
   currentDate.value = date
   activeTab.value = 'tech'
-  activeSubTab.value = 'github'
   await loadData(date)
   showArchive.value = false
   window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -242,11 +240,11 @@ const handleScroll = () => {
   scrolled.value = window.innerWidth < 768 && window.scrollY > 40
 }
 
-// ====== 主标签（动态 count） ======
+// ====== 主标签（动态 count，只显示有内容的） ======
 const mainTabs = computed(() => {
   const tabs = [
     { id: 'tech', name: '科技新闻', count: allItems.value.filter(i => i.category === 'tech').length },
-    { id: 'finance', name: '财经要点', count: allItems.value.filter(i => i.category === 'finance').length },
+    { id: 'finance', name: '财经新闻', count: allItems.value.filter(i => i.category === 'finance').length },
     { id: 'politics', name: '时政观察', count: allItems.value.filter(i => i.category === 'politics').length },
     { id: 'art', name: '艺术新闻', count: allItems.value.filter(i => i.category === 'art').length },
   ]
@@ -262,37 +260,8 @@ watch(mainTabs, (tabs) => {
   }
 }, { immediate: true })
 
-// ====== 子标签（按 source 动态生成） ======
-const subTabs = computed(() => {
-  const items = allItems.value.filter(i => i.category === activeTab.value)
-  const map = {}
-  for (const item of items) {
-    const src = item.source || 'other'
-    if (!map[src]) map[src] = { id: src, name: src, count: 0 }
-    map[src].count++
-  }
-  const tabs = Object.values(map)
-  return tabs.length > 1 ? tabs : []
-})
-
-watch(activeTab, () => {
-  const tabs = subTabs.value
-  if (tabs.length > 0) {
-    activeSubTab.value = tabs[0].id
-  } else {
-    activeSubTab.value = ''
-  }
-})
-
-// ====== 过滤逻辑 ======
+// ====== 过滤逻辑（只按 category，不做子标签二次过滤） ======
 const filteredItems = computed(() => {
-  if (subTabs.value.length === 0) {
-    return allItems.value.filter(item => item.category === activeTab.value)
-  }
-  const bySub = allItems.value.filter(item =>
-    item.category === activeTab.value && item.source === activeSubTab.value
-  )
-  if (bySub.length > 0) return bySub
   return allItems.value.filter(item => item.category === activeTab.value)
 })
 </script>
