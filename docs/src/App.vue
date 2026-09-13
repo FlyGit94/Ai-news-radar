@@ -218,16 +218,19 @@ onUnmounted(() => {
 
 const loadData = async (date) => {
   const target = date || currentDate.value
+  console.log('[loadData] 开始加载:', target)
   try {
     const res = await fetch(`./data/${target}.json`)
+    console.log('[loadData] 状态码:', res.status)
     if (res.ok) {
       allItems.value = await res.json()
+      console.log('[loadData] 加载条数:', allItems.value.length)
     } else {
       console.warn('数据加载失败：', res.status)
       allItems.value = []
     }
   } catch (e) {
-    console.error('加载数据失败', e)
+    console.error('[loadData] 加载数据失败', e)
     allItems.value = []
   }
 }
