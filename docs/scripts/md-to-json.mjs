@@ -7,7 +7,7 @@ const OUT_DIR = path.resolve('public/data')
 // 分类映射：只保留三种分类
 const categoryMap = {
   '科技新闻': { category: 'tech', subCategory: 'github' },
-  '财经要点': { category: 'finance', subCategory: 'stocks' },
+  '财经新闻': { category: 'finance', subCategory: 'stocks' },
   '时政观察': { category: 'politics', subCategory: 'china' },
   '艺术新闻': { category: 'art', subCategory: 'general' },
 }
