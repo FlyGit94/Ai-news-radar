@@ -60,7 +60,7 @@
 
         <!-- 来源行：橙色竖条更长，与文字中线对齐 -->
         <div class="flex items-center gap-2 text-sm text-gray-500 mt-3">
-          <span class="w-0.5 h-6 bg-orange-500 rounded-full"></span>
+          <span class="w-0.5 h-6 bg-orange-500 rounded-full translate-y-0.5"></span>
           <span>{{ item.source }}</span>
           <span class="text-gray-700">·</span>
           <span>{{ item.author }}</span>
