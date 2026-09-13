@@ -153,7 +153,7 @@ const allItems = ref([])
 
 onMounted(async () => {
   window.addEventListener('scroll', handleScroll, { passive: true })
-  await loadData()
+  await Promise.all([loadData(), loadIndex()])
 })
 
 onUnmounted(() => {
@@ -170,6 +170,20 @@ const loadData = async () => {
     }
   } catch (e) {
     console.error('加载数据失败', e)
+  }
+}
+
+// ====== 归档日期：从 index.json 动态读取 ======
+const archiveDates = ref([])
+
+const loadIndex = async () => {
+  try {
+    const res = await fetch('./data/index.json')
+    if (res.ok) {
+      archiveDates.value = await res.json()
+    }
+  } catch (e) {
+    console.error('加载归档索引失败', e)
   }
 }
 
@@ -232,18 +246,4 @@ const filteredItems = computed(() => {
   // 回退：只按 category 过滤（兜底，防止 md 里 subCategory 对不上时一片空白）
   return allItems.value.filter(item => item.category === activeTab.value)
 })
-
-// ====== 归档日期 ======
-const archiveDates = (() => {
-  const start = new Date('2026-09-12')
-  const today = new Date()
-  const dates = []
-  for (let d = new Date(today); d >= start; d.setDate(d.getDate() - 1)) {
-    const yyyy = d.getFullYear()
-    const mm = String(d.getMonth() + 1).padStart(2, '0')
-    const dd = String(d.getDate()).padStart(2, '0')
-    dates.push(`${yyyy}-${mm}-${dd}`)
-  }
-  return dates
-})()
 </script>
