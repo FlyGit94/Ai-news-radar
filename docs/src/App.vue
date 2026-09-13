@@ -18,12 +18,15 @@
         </div>
       </div>
 
-      <!-- 第二层：主标签（手机端左对齐，电脑端居中），最左侧是主题切换 -->
-      <nav class="max-w-4xl mx-auto flex gap-2 px-4 md:px-6 pb-2 text-base justify-start md:justify-center overflow-x-auto whitespace-nowrap items-center">
-        <!-- 主题切换按钮（SVG） -->
+      <!-- 第二层：主标签 + 滑动指示条 -->
+      <nav
+        ref="tabNav"
+        class="relative max-w-4xl mx-auto flex gap-2 px-4 md:px-6 pb-2 text-base justify-start md:justify-center overflow-x-auto whitespace-nowrap items-center"
+      >
+        <!-- 主题切换按钮 -->
         <button
           @click="toggleTheme"
-          class="mr-2 p-1.5 rounded-md text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+          class="mr-2 p-1.5 rounded-md text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-colors shrink-0"
           :title="isDark ? '切换到亮色' : '切换到暗色'"
         >
           <!-- 太阳图标：暗色模式下显示 -->
@@ -31,88 +34,96 @@
             <circle cx="12" cy="12" r="4" />
             <path stroke-linecap="round" d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
           </svg>
-
           <!-- 月亮图标：亮色模式下显示 -->
           <svg v-else xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
           </svg>
         </button>
-        
-        <!-- 主标签 -->
+
+        <!-- 主标签按钮 -->
         <button
-          v-for="tab in mainTabs" :key="tab.id"
+          v-for="(tab, idx) in mainTabs" :key="tab.id"
+          :ref="el => { if (el) tabRefs[idx] = el }"
           @click="activeTab = tab.id"
-          :class="['px-4 pb-2 transition-colors border-b-2', activeTab === tab.id ? 'text-black dark:text-white font-bold border-black dark:border-white' : 'text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white border-transparent']"
+          :class="['px-4 pb-2 transition-colors shrink-0', activeTab === tab.id ? 'text-black dark:text-white font-bold' : 'text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white']"
         >
           {{ tab.name }} <span class="text-sm text-gray-500 ml-1">{{ tab.count }}</span>
         </button>
+
+        <!-- 滑动指示条 -->
+        <span
+          class="absolute bottom-0 h-0.5 bg-black dark:bg-white rounded-full transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]"
+          :style="indicatorStyle"
+        ></span>
       </nav>
     </header>
 
     <!-- 主体内容：卡片流 -->
     <main class="max-w-4xl mx-auto px-4 md:px-6 py-8">
-      <article
-        v-for="item in filteredItems" :key="item.id"
-        class="border-b-2 border-black/20 dark:border-white/20 py-8 last:border-0"
-      >
-        <!-- 标题 + 评分 -->
-        <div class="flex items-center gap-2">
-          <h2 class="text-2xl font-bold text-orange-600 dark:text-orange-400 hover:text-orange-500 dark:hover:text-orange-300 cursor-pointer transition-colors leading-snug">
-            {{ item.title }}
-          </h2>
-          <span
-            v-if="item.score"
-            class="inline-flex items-center bg-orange-500/15 text-orange-600 dark:bg-orange-500/20 dark:text-orange-300 text-sm font-bold px-2 py-0.5 rounded translate-y-0.5"
-          >
-            {{ item.score }}
-          </span>
-        </div>
+      <TransitionGroup name="card" tag="div">
+        <article
+          v-for="item in filteredItems" :key="item.id"
+          class="border-b-2 border-black/20 dark:border-white/20 py-8 last:border-0"
+        >
+          <!-- 标题 + 评分 -->
+          <div class="flex items-center gap-2">
+            <h2 class="text-2xl font-bold text-orange-600 dark:text-orange-400 hover:text-orange-500 dark:hover:text-orange-300 cursor-pointer transition-colors leading-snug">
+              {{ item.title }}
+            </h2>
+            <span
+              v-if="item.score"
+              class="inline-flex items-center bg-orange-500/15 text-orange-600 dark:bg-orange-500/20 dark:text-orange-300 text-sm font-bold px-2 py-0.5 rounded translate-y-0.5"
+            >
+              {{ item.score }}
+            </span>
+          </div>
 
-        <!-- 摘要 -->
-        <p class="text-gray-700 dark:text-gray-200 text-base mt-3 leading-relaxed">{{ item.description }}</p>
+          <!-- 摘要 -->
+          <p class="text-gray-700 dark:text-gray-200 text-base mt-3 leading-relaxed">{{ item.description }}</p>
 
-        <!-- 来源行 -->
-        <div class="flex items-center gap-2 text-sm text-gray-500 mt-3">
-          <span class="w-0.5 h-6 bg-orange-500 rounded-full translate-y-0.5"></span>
-          <span>{{ item.source }}</span>
-          <span class="text-gray-400 dark:text-gray-700">·</span>
-          <span>{{ item.author }}</span>
-          <span class="text-gray-400 dark:text-gray-700">·</span>
-          <span>{{ item.time }}</span>
-        </div>
+          <!-- 来源行 -->
+          <div class="flex items-center gap-2 text-sm text-gray-500 mt-3">
+            <span class="w-0.5 h-6 bg-orange-500 rounded-full translate-y-0.5"></span>
+            <span>{{ item.source }}</span>
+            <span class="text-gray-400 dark:text-gray-700">·</span>
+            <span>{{ item.author }}</span>
+            <span class="text-gray-400 dark:text-gray-700">·</span>
+            <span>{{ item.time }}</span>
+          </div>
 
-        <!-- 分段：背景 / 影响 / 社区讨论 -->
-        <div class="mt-4 space-y-3 text-base text-gray-700 dark:text-gray-200">
-          <p v-if="item.background">
-            <span class="text-gray-500 dark:text-gray-400 mr-1">「背景」</span>{{ item.background }}
-          </p>
-          <p v-if="item.impact">
-            <span class="text-gray-500 dark:text-gray-400 mr-1">「影响」</span>{{ item.impact }}
-          </p>
-          <p v-if="item.community">
-            <span class="text-gray-500 dark:text-gray-400 mr-1">「社区讨论」</span>{{ item.community }}
-          </p>
-        </div>
+          <!-- 分段：背景 / 影响 / 社区讨论 -->
+          <div class="mt-4 space-y-3 text-base text-gray-700 dark:text-gray-200">
+            <p v-if="item.background">
+              <span class="text-gray-500 dark:text-gray-400 mr-1">「背景」</span>{{ item.background }}
+            </p>
+            <p v-if="item.impact">
+              <span class="text-gray-500 dark:text-gray-400 mr-1">「影响」</span>{{ item.impact }}
+            </p>
+            <p v-if="item.community">
+              <span class="text-gray-500 dark:text-gray-400 mr-1">「社区讨论」</span>{{ item.community }}
+            </p>
+          </div>
 
-        <!-- 参考链接 -->
-        <div v-if="item.references" class="mt-4">
-          <a :href="item.references" target="_blank" :title="item.references"
-             class="block border border-black/10 dark:border-white/10 rounded-lg px-3 py-2 text-sm text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white hover:border-black/20 dark:hover:border-white/20 transition-colors">
-            参考链接
-          </a>
-        </div>
+          <!-- 参考链接 -->
+          <div v-if="item.references" class="mt-4">
+            <a :href="item.references" target="_blank" :title="item.references"
+               class="block border border-black/10 dark:border-white/10 rounded-lg px-3 py-2 text-sm text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white hover:border-black/20 dark:hover:border-white/20 transition-colors">
+              参考链接
+            </a>
+          </div>
 
-        <!-- 标签 -->
-        <div v-if="item.tags && item.tags.length" class="mt-2 flex items-center flex-wrap gap-2">
-          <span class="text-sm text-gray-500 dark:text-gray-400">标签：</span>
-          <span
-            v-for="tag in item.tags" :key="tag"
-            class="bg-black/5 border border-black/10 dark:bg-white/5 dark:border-white/10 text-orange-600 dark:text-orange-300/80 text-sm px-3 py-1 rounded-md"
-          >
-            #{{ tag }}
-          </span>
-        </div>
-      </article>
+          <!-- 标签 -->
+          <div v-if="item.tags && item.tags.length" class="mt-2 flex items-center flex-wrap gap-2">
+            <span class="text-sm text-gray-500 dark:text-gray-400">标签：</span>
+            <span
+              v-for="tag in item.tags" :key="tag"
+              class="bg-black/5 border border-black/10 dark:bg-white/5 dark:border-white/10 text-orange-600 dark:text-orange-300/80 text-sm px-3 py-1 rounded-md"
+            >
+              #{{ tag }}
+            </span>
+          </div>
+        </article>
+      </TransitionGroup>
 
       <div v-if="filteredItems.length === 0" class="text-center py-20 text-gray-400 dark:text-gray-600">
         暂无内容
@@ -154,7 +165,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
+import { ref, computed, watch, onMounted, onUnmounted, nextTick } from 'vue'
 
 // ====== 当前日期 ======
 const currentDate = ref('2026-09-13')
@@ -184,6 +195,25 @@ const toggleTheme = () => {
 const allItems = ref([])
 const archiveDates = ref([])
 
+// ====== 滑动指示条 ======
+const tabNav = ref(null)
+const tabRefs = ref([])
+const indicatorStyle = ref({ left: '0px', width: '0px' })
+
+const updateIndicator = () => {
+  const idx = mainTabs.value.findIndex(t => t.id === activeTab.value)
+  const el = tabRefs.value[idx]
+  if (!el || !tabNav.value) return
+  const navRect = tabNav.value.getBoundingClientRect()
+  const btnRect = el.getBoundingClientRect()
+  indicatorStyle.value = {
+    left: (btnRect.left - navRect.left + tabNav.value.scrollLeft) + 'px',
+    width: btnRect.width + 'px',
+  }
+}
+
+watch(activeTab, () => nextTick(updateIndicator))
+
 onMounted(async () => {
   // 主题初始化
   const saved = localStorage.getItem('theme')
@@ -191,11 +221,15 @@ onMounted(async () => {
   applyTheme()
 
   window.addEventListener('scroll', handleScroll, { passive: true })
+  window.addEventListener('resize', updateIndicator)
   await Promise.all([loadData(), loadIndex()])
+  await nextTick()
+  updateIndicator()
 })
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
+  window.removeEventListener('resize', updateIndicator)
 })
 
 const loadData = async (date) => {
@@ -284,3 +318,21 @@ const filteredItems = computed(() => {
   return allItems.value.filter(item => item.category === activeTab.value)
 })
 </script>
+
+<style>
+.card-enter-active,
+.card-leave-active {
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.card-enter-from {
+  opacity: 0;
+  transform: translateY(12px);
+}
+.card-leave-to {
+  opacity: 0;
+  transform: translateY(-12px);
+}
+.card-leave-active {
+  position: absolute;
+}
+</style>
