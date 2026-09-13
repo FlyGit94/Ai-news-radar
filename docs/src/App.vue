@@ -116,22 +116,15 @@
       </div>
     </main>
 
-    <!-- 归档列表：点遮罩空白处关闭 -->
+    <!-- 归档列表（只通过点击日期 / Latest report / Esc 键关闭） -->
     <div
       v-if="showArchive"
-      @click.self="showArchive = false"
       class="fixed inset-0 z-[60] bg-white/95 dark:bg-dark/95 backdrop-blur-lg overflow-y-auto"
     >
       <div class="max-w-3xl mx-auto py-10 px-6">
-        <!-- 标题 + 返回按钮（去掉叉号，改为文字按钮） -->
-        <div class="flex items-center justify-between mb-8">
+        <!-- 标题：没有返回按钮 -->
+        <div class="mb-8">
           <h1 class="text-2xl font-bold text-black dark:text-white">每日简报</h1>
-          <button
-            @click="showArchive = false"
-            class="text-sm text-gray-500 hover:text-black dark:hover:text-white transition-colors"
-          >
-            ← 返回
-          </button>
         </div>
 
         <p class="text-gray-500 text-base mb-6">{{ archiveDates.length }} reports · newest first · generated {{ currentDate }}</p>
@@ -197,11 +190,13 @@ onMounted(async () => {
   applyTheme()
 
   window.addEventListener('scroll', handleScroll, { passive: true })
+  window.addEventListener('keydown', handleEsc)
   await Promise.all([loadData(), loadIndex()])
 })
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
+  window.removeEventListener('keydown', handleEsc)
 })
 
 const loadData = async (date) => {
@@ -246,6 +241,13 @@ const switchDate = async (date) => {
 
 const handleScroll = () => {
   scrolled.value = window.innerWidth < 768 && window.scrollY > 40
+}
+
+// ====== Esc 键关闭归档 ======
+const handleEsc = (e) => {
+  if (e.key === 'Escape' && showArchive.value) {
+    showArchive.value = false
+  }
 }
 
 // ====== 主标签（动态 count，只显示有内容的） ======
