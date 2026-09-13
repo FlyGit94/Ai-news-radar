@@ -6,6 +6,7 @@
 - 后端：Horizon（多源抓取 + AI 打分 + 简报生成）
 - 部署：GitHub Pages
 
+🙏 此致感谢
 ---
 
 ## 📁 目录结构
@@ -63,8 +64,3 @@ Ai-news-radar/
 └── README.md
 ```
 
----
-
-🙏 致谢
-+ Horizon：后端抓取、AI 分析、简报生成
-+ Vue 3、Vite、Tailwind CSS：前端
