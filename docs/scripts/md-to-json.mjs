@@ -4,12 +4,17 @@ import path from 'path'
 const RAW_DIR = path.resolve('public/data/raw')
 const OUT_DIR = path.resolve('public/data')
 
-// 解析单篇 md
+// 分类映射：md 里的中文分类 → 前端用的 category / subCategory
+const categoryMap = {
+  '科技新闻': { category: 'tech', subCategory: 'github' },
+  '财经新闻': { category: 'market', subCategory: 'stocks' },
+}
+
 function parseMarkdown(md) {
   const lines = md.split('\n')
   const items = []
   let current = null
-  let currentCategory = ''
+  let currentCategoryRaw = ''
 
   let i = 0
   while (i < lines.length) {
@@ -17,7 +22,7 @@ function parseMarkdown(md) {
 
     // 一级标题 → 分类
     if (/^##\s+/.test(line)) {
-      currentCategory = line.replace(/^##\s+/, '').trim()
+      currentCategoryRaw = line.replace(/^##\s+/, '').trim()
       i++
       continue
     }
@@ -26,9 +31,12 @@ function parseMarkdown(md) {
     const anchorMatch = line.match(/^<a id="(item-[^"]+)"><\/a>/)
     if (anchorMatch) {
       if (current) items.push(current)
+      const mapped = categoryMap[currentCategoryRaw] || { category: 'tech', subCategory: 'github' }
       current = {
         id: anchorMatch[1],
-        category: currentCategory,
+        category: mapped.category,
+        subCategory: mapped.subCategory,
+        categoryRaw: currentCategoryRaw,
         title: '',
         references: '',
         score: null,
