@@ -83,3 +83,7 @@ jobs:
           publish_branch: gh-pages
           keep_files: false
           commit_message: "deploy: ${{ github.run_id }}"
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**          
