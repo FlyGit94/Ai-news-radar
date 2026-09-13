@@ -66,12 +66,10 @@ jobs:
 
       - name: Generate JSON from Markdown
         run: node scripts/md-to-json.mjs
-        working-directory: docs
 
       - name: Generate RSS Feed
         run: node scripts/md-to-rss.mjs
-        working-directory: docs
-
+        
       - name: Build frontend
         run: npm run build
         working-directory: docs
