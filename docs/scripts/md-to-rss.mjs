@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 const RAW_DIR = path.resolve('docs/public/data/raw')
-const OUT_FILE = path.resolve('docs/public/data/feed.xml')
+const OUT_FILE = path.resolve('docs/public/assets/data/feed.xml')
 
 // ⚠️ 修改成你自己的站点信息
 const SITE_URL = 'https://flyigit94.github.io/Ai-news-radar'
