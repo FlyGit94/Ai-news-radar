@@ -81,6 +81,9 @@ jobs:
           npx vite build
         working-directory: docs
 
+      - name: List dist/data files
+        run: ls -la docs/dist/data/
+
       # ===== 4. 部署到 GitHub Pages =====
       - name: Setup Pages
         uses: actions/configure-pages@v4
