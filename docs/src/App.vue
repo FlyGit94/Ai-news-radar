@@ -6,8 +6,10 @@
 
       <!-- 第一层：日期 + 历史归档（滑动时收起，仅手机端） -->
       <div
-        class="max-w-4xl mx-auto text-center overflow-hidden transition-all duration-300"
-        :class="scrolled ? 'max-h-0 opacity-0 py-0' : 'max-h-40 opacity-100 pt-8 pb-4'"
+        class="max-w-4xl mx-auto text-center overflow-hidden transition-all duration-300 ease-out"
+        :class="scrolled
+          ? '-translate-y-full opacity-0 pointer-events-none h-0'
+          : 'translate-y-0 opacity-100 h-32 pt-8 pb-4'"
       >
         <h1 class="text-5xl font-bold text-white tracking-tight">{{ currentDate }}</h1>
         <div class="mt-5 flex justify-center">
