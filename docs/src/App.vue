@@ -237,7 +237,7 @@ const loadData = async (date) => {
 
 const loadIndex = async () => {
   try {
-    const res = await fetch('./data/index.json')
+    const res = await fetch('./assets/data/index.json')
     if (res.ok) {
       archiveReports.value = await res.json()
     }
