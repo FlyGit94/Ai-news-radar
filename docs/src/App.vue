@@ -203,6 +203,12 @@ const allItems = ref([])
 const archiveReports = ref([])
 
 onMounted(async () => {
+  // 从 URL 参数读日期（RSS 点击进入时用）
+  const params = new URLSearchParams(window.location.search)
+  const dateParam = params.get('date')
+  if (dateParam && /^\d{4}-\d{2}-\d{2}$/.test(dateParam)) {
+    currentDate.value = dateParam
+  }
   // 主题初始化
   const saved = localStorage.getItem('theme')
   if (saved === 'light') isDark.value = false
