@@ -176,7 +176,7 @@
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 
 // ====== 当前日期 ======
-const currentDate = ref('2026-09-13')
+const currentDate = ref('')
 const showArchive = ref(false)
 const activeTab = ref('tech')
 const scrolled = ref(false)
@@ -215,7 +215,8 @@ onMounted(async () => {
   applyTheme()
 
   window.addEventListener('scroll', handleScroll, { passive: true })
-  await Promise.all([loadData(), loadIndex()])
+  await loadIndex()
+  await loadData()
 })
 
 onUnmounted(() => {
