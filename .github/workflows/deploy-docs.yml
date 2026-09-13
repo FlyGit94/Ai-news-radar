@@ -2,7 +2,10 @@ name: Deploy Docs to GitHub Pages
 
 on:
   push:
-    branches: ["main"] # 或你的主分支名
+    branches: ["main"]
+    paths:
+      - 'docs/**'
+      - '.github/workflows/deploy-docs.yml'
   workflow_dispatch:
 
 permissions:
@@ -37,7 +40,7 @@ jobs:
       - name: Generate RSS Feed
         run: node scripts/md-to-rss.mjs
         working-directory: docs
-        
+
       - name: Build
         run: npm run build
         working-directory: docs
