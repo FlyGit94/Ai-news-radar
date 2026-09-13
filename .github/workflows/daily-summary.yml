@@ -65,10 +65,10 @@ jobs:
         working-directory: docs
 
       - name: Generate JSON from Markdown
-        run: node scripts/md-to-json.mjs
+        run: node docs/scripts/md-to-json.mjs
 
       - name: Generate RSS Feed
-        run: node scripts/md-to-rss.mjs
+        run: node docs/scripts/md-to-rss.mjs
         
       - name: Build frontend
         run: npm run build
