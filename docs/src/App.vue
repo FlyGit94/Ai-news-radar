@@ -211,11 +211,9 @@ const handleScroll = () => {
 
 // ====== 主标签（动态 count） ======
 const mainTabs = computed(() => [
-  { id: 'tech', name: '技术动态', count: allItems.value.filter(i => i.category === 'tech').length },
-  { id: 'market', name: '市场行情', count: allItems.value.filter(i => i.category === 'market').length },
+  { id: 'tech', name: '科技新闻', count: allItems.value.filter(i => i.category === 'tech').length },
+  { id: 'finance', name: '财经新闻', count: allItems.value.filter(i => i.category === 'finance').length },
   { id: 'politics', name: '时政观察', count: allItems.value.filter(i => i.category === 'politics').length },
-  { id: 'finance', name: '财经要点', count: allItems.value.filter(i => i.category === 'finance').length },
-  { id: 'community', name: '社区讨论', count: allItems.value.filter(i => i.category === 'community').length },
 ])
 
 // ====== 子标签（按 source 动态生成） ======
