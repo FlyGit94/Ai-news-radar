@@ -23,11 +23,15 @@ function escapeXml(str) {
 }
 
 function extractTitle(md, date) {
-  const h1Match = md.match(/^#\s+(.+)/m)
-  if (h1Match) return h1Match[1]
-  const titleMatch = md.match(/^title:\s*"(.+?)"/m)
-  if (titleMatch) return titleMatch[1]
-  return `每日简报 ${date}`
+  return `每日简报：${date}`
+}
+
+function stripLeadingH1(md) {
+  const lines = md.split('\n')
+  if (lines[0] && lines[0].startsWith('# ')) {
+    lines.shift()
+  }
+  return lines.join('\n').trim()
 }
 
 const files = fs.readdirSync(RAW_DIR).filter(f => f.endsWith('.md'))
@@ -44,7 +48,8 @@ for (const file of sortedFiles) {
   const date = file.replace('.md', '')
   const md = fs.readFileSync(path.join(RAW_DIR, file), 'utf-8')
   const title = extractTitle(md, date)
-  const html = marked.parse(md)
+  const contentMd = stripLeadingH1(md)
+  const html = marked.parse(contentMd)
   const link = `${SITE_URL}/?date=${date}`
   const updated = `${date}T00:00:00Z`
   items.push({ title, link, html, updated, date })
