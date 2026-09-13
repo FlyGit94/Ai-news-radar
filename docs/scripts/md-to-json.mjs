@@ -121,10 +121,16 @@ function parseMarkdown(md) {
 
 // 遍历 raw 目录
 const files = fs.readdirSync(RAW_DIR).filter(f => f.endsWith('.md'))
+
 if (files.length === 0) {
   console.log('⚠️ public/data/raw/ 目录下没有 .md 文件')
+  // 仍然生成一个空的 index.json
+  fs.writeFileSync(path.join(OUT_DIR, 'index.json'), JSON.stringify([], null, 2), 'utf-8')
   process.exit(0)
 }
+
+// 收集所有日期（用于生成 index.json）
+const availableDates = []
 
 for (const file of files) {
   const date = file.replace('.md', '')
@@ -135,5 +141,17 @@ for (const file of files) {
     JSON.stringify(items, null, 2),
     'utf-8'
   )
+  availableDates.push(date)
   console.log(`✅ ${file} → ${date}.json（${items.length} 条）`)
 }
+
+// 按日期从新到旧排序
+availableDates.sort((a, b) => (a < b ? 1 : -1))
+
+// 输出 index.json
+fs.writeFileSync(
+  path.join(OUT_DIR, 'index.json'),
+  JSON.stringify(availableDates, null, 2),
+  'utf-8'
+)
+console.log(`📅 index.json → ${availableDates.length} 天（${availableDates.join(', ')}）`)
