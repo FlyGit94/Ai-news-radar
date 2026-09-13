@@ -9,7 +9,6 @@ const categoryMap = {
   '科技新闻': { category: 'tech', subCategory: 'github' },
   '财经新闻': { category: 'finance', subCategory: 'stocks' },
   '时政观察': { category: 'politics', subCategory: 'china' },
-  '市场行情': { category: 'market', subCategory: 'stocks' },
 }
 
 function parseMarkdown(md) {
