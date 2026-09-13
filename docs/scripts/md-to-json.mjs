@@ -4,7 +4,7 @@ import path from 'path'
 const RAW_DIR = path.resolve('public/data/raw')
 const OUT_DIR = path.resolve('public/data')
 
-// 分类映射：只保留三种分类
+// 分类映射：只保留四种分类
 const categoryMap = {
   '科技新闻': { category: 'tech', subCategory: 'github' },
   '财经新闻': { category: 'finance', subCategory: 'stocks' },
@@ -12,8 +12,17 @@ const categoryMap = {
   '艺术新闻': { category: 'art', subCategory: 'general' },
 }
 
-// 默认兜底分类（md 里出现未映射分类时使用）
+// 默认兜底分类
 const DEFAULT_CATEGORY = { category: 'tech', subCategory: 'github' }
+
+// 从 md 顶部提取「从 X 条内容中筛选出 Y 条重要资讯」
+function extractStats(md) {
+  const m = md.match(/从\s*(\d+)\s*条内容中筛选出\s*(\d+)\s*条重要资讯/)
+  if (m) {
+    return { fetched: parseInt(m[1], 10), selected: parseInt(m[2], 10) }
+  }
+  return { fetched: 0, selected: 0 }
+}
 
 function parseMarkdown(md) {
   const lines = md.split('\n')
@@ -133,28 +142,38 @@ if (files.length === 0) {
   process.exit(0)
 }
 
-const availableDates = []
+// 收集所有日期的元信息
+const reports = []
 
 for (const file of files) {
   const date = file.replace('.md', '')
   const md = fs.readFileSync(path.join(RAW_DIR, file), 'utf-8')
   const items = parseMarkdown(md)
+  const stats = extractStats(md)
+
   fs.writeFileSync(
     path.join(OUT_DIR, `${date}.json`),
     JSON.stringify(items, null, 2),
     'utf-8'
   )
-  availableDates.push(date)
-  console.log(`✅ ${file} → ${date}.json（${items.length} 条）`)
+
+  reports.push({
+    date,
+    fetched: stats.fetched,
+    selected: stats.selected,
+    itemCount: items.length,
+  })
+
+  console.log(`✅ ${file} → ${date}.json（${items.length} 条，从 ${stats.fetched} 中选 ${stats.selected}）`)
 }
 
 // 按日期从新到旧排序
-availableDates.sort((a, b) => (a < b ? 1 : -1))
+reports.sort((a, b) => (a.date < b.date ? 1 : -1))
 
-// 输出 index.json
+// 输出 index.json（对象数组）
 fs.writeFileSync(
   path.join(OUT_DIR, 'index.json'),
-  JSON.stringify(availableDates, null, 2),
+  JSON.stringify(reports, null, 2),
   'utf-8'
 )
-console.log(`📅 index.json → ${availableDates.length} 天（${availableDates.join(', ')}）`)
+console.log(`📅 index.json → ${reports.length} 天（${reports.map(r => r.date).join(', ')}）`)
