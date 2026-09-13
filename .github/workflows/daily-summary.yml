@@ -2,12 +2,17 @@ name: Daily Horizon Summary
 
 on:
   schedule:
-    # 北京时间每周一早上 06:30 触发（UTC 周日 22:30）
     - cron: '30 22 * * 0'
   workflow_dispatch:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
   generate-and-deploy:
@@ -36,7 +41,7 @@ jobs:
       - name: Run Horizon
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
-        run: uv run horizon --hours 48
+        run: uv run horizon --hours 72
 
       - name: Commit generated summaries
         run: |
@@ -65,25 +70,22 @@ jobs:
       - name: Build frontend
         run: npm run build
         working-directory: docs
-      
-      - name: List dist structure
-        run: |
-          echo "=== dist/ ==="
-          ls -la docs/dist/
-          echo "=== dist/assets/ ==="
-          ls -la docs/dist/assets/
-          echo "=== dist/assets/data/ ==="
-          ls -la docs/dist/assets/data/
-      
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs/dist
-          publish_branch: gh-pages
-          keep_files: false
-          commit_message: "deploy: ${{ github.run_id }}"
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**          
+          path: docs/dist
+
+  deploy:
+    needs: generate-and-deploy
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
