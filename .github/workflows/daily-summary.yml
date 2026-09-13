@@ -75,7 +75,10 @@ jobs:
         run: ls -la docs/public/data/
 
       - name: Build frontend
-        run: npm run build
+        run: |
+          ls -la public/
+          ls -la public/data/
+          npx vite build
         working-directory: docs
 
       # ===== 4. 部署到 GitHub Pages =====
