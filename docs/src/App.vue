@@ -116,36 +116,55 @@
       </div>
     </main>
 
-    <!-- 归档列表（只能通过点击日期 / Latest report 关闭） -->
+    <!-- 归档列表 -->
     <div
       v-if="showArchive"
       class="fixed inset-0 z-[60] bg-white/95 dark:bg-dark/95 backdrop-blur-lg overflow-y-auto"
     >
       <div class="max-w-3xl mx-auto py-10 px-6">
-        <!-- 标题：没有返回按钮 -->
+        <!-- 标题 -->
         <div class="mb-8">
           <h1 class="text-2xl font-bold text-black dark:text-white">每日简报</h1>
         </div>
 
-        <p class="text-gray-500 text-base mb-6">{{ archiveDates.length }} reports · newest first · generated {{ currentDate }}</p>
+        <p class="text-gray-500 text-base mb-6">
+          {{ archiveReports.length }} reports · newest first · generated {{ currentDate }}
+        </p>
 
+        <!-- Latest report -->
         <button
-          v-if="archiveDates.length > 0"
-          @click="switchDate(archiveDates[0])"
+          v-if="archiveReports.length > 0"
+          @click="switchDate(archiveReports[0].date)"
           class="block w-full text-left bg-black/5 dark:bg-white/5 rounded-lg p-4 mb-8 text-base text-blue-600 dark:text-blue-400 hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
         >
-          → Latest report ({{ archiveDates[0] }})
+          → Latest report ({{ archiveReports[0].date }})
         </button>
 
+        <!-- 日期列表：日期 + 统计信息 + KB -->
         <ul class="divide-y divide-black/10 dark:divide-white/10">
-          <li v-for="date in archiveDates" :key="date" class="flex justify-between py-3">
+          <li
+            v-for="report in archiveReports"
+            :key="report.date"
+            class="flex items-center justify-between py-3 gap-4"
+          >
             <button
-              @click="switchDate(date)"
-              :class="['text-left transition-colors text-base', date === currentDate ? 'text-blue-600 dark:text-blue-400 font-bold' : 'text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white']"
+              @click="switchDate(report.date)"
+              :class="['text-left transition-colors text-base shrink-0', report.date === currentDate ? 'text-blue-600 dark:text-blue-400 font-bold' : 'text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white']"
             >
-              {{ date }}
+              {{ report.date }}
             </button>
-            <span class="text-gray-400 dark:text-gray-600 text-sm">{{ Math.floor(Math.random() * 50 + 100) }} KB</span>
+
+            <span
+              v-if="report.fetched > 0"
+              class="text-gray-500 dark:text-gray-500 text-sm flex-1 text-right truncate"
+            >
+              从 {{ report.fetched }} 条内容中筛选出 {{ report.selected }} 条重要资讯
+            </span>
+            <span v-else class="flex-1"></span>
+
+            <span class="text-gray-400 dark:text-gray-600 text-sm shrink-0">
+              {{ Math.floor(Math.random() * 50 + 100) }} KB
+            </span>
           </li>
         </ul>
       </div>
@@ -181,7 +200,7 @@ const toggleTheme = () => {
 
 // ====== 数据 ======
 const allItems = ref([])
-const archiveDates = ref([])
+const archiveReports = ref([])
 
 onMounted(async () => {
   // 主题初始化
@@ -217,7 +236,7 @@ const loadIndex = async () => {
   try {
     const res = await fetch('./data/index.json')
     if (res.ok) {
-      archiveDates.value = await res.json()
+      archiveReports.value = await res.json()
     }
   } catch (e) {
     console.error('加载归档索引失败', e)
@@ -252,7 +271,7 @@ const mainTabs = computed(() => {
   return tabs.filter(t => t.count > 0)
 })
 
-// 自动纠正 activeTab，防止落到被隐藏的标签上
+// 自动纠正 activeTab
 watch(mainTabs, (tabs) => {
   if (tabs.length === 0) return
   const stillVisible = tabs.some(t => t.id === activeTab.value)
@@ -261,7 +280,7 @@ watch(mainTabs, (tabs) => {
   }
 }, { immediate: true })
 
-// ====== 过滤逻辑（只按 category，不做子标签二次过滤） ======
+// ====== 过滤逻辑 ======
 const filteredItems = computed(() => {
   return allItems.value.filter(item => item.category === activeTab.value)
 })
