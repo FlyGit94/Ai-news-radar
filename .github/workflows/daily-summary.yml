@@ -65,7 +65,16 @@ jobs:
       - name: Build frontend
         run: npm run build
         working-directory: docs
-
+      
+      - name: List dist structure
+        run: |
+          echo "=== dist/ ==="
+          ls -la docs/dist/
+          echo "=== dist/assets/ ==="
+          ls -la docs/dist/assets/
+          echo "=== dist/assets/data/ ==="
+          ls -la docs/dist/assets/data/
+      
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
