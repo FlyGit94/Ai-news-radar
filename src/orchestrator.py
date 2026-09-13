@@ -12,7 +12,7 @@ from rich.console import Console
 
 from .console_icons import get_icons
 from .models import Config, ContentItem
-from .storage.manager import StorageManager, safe_output_path
+from .storage.manager import StorageManager
 from .services.email import EmailManager
 from .services.webhook import WebhookNotifier
 from .scrapers.github import GitHubScraper
