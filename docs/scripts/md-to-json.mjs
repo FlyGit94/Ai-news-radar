@@ -4,6 +4,9 @@ import path from 'path'
 const RAW_DIR = path.resolve('docs/public/data/raw')
 const OUT_DIR = path.resolve('docs/public/assets/data')
 
+// 确保输出目录存在
+fs.mkdirSync(OUT_DIR, { recursive: true })
+
 // 分类映射：只保留四种分类
 const categoryMap = {
   '科技新闻': { category: 'tech', subCategory: 'github' },
