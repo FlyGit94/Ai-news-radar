@@ -20,15 +20,24 @@
 
       <!-- 第二层：主标签（手机端左对齐，电脑端居中），最左侧是主题切换 -->
       <nav class="max-w-4xl mx-auto flex gap-2 px-4 md:px-6 pb-2 text-base justify-start md:justify-center overflow-x-auto whitespace-nowrap items-center">
-        <!-- 主题切换按钮 -->
+        <!-- 主题切换按钮（SVG） -->
         <button
           @click="toggleTheme"
-          class="mr-2 text-lg leading-none transition-transform hover:scale-110"
+          class="mr-2 p-1.5 rounded-md text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
           :title="isDark ? '切换到亮色' : '切换到暗色'"
         >
-          {{ isDark ? '☀️' : '🌙' }}
-        </button>
+          <!-- 太阳图标：暗色模式下显示 -->
+          <svg v-if="isDark" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="4" />
+            <path stroke-linecap="round" d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+          </svg>
 
+          <!-- 月亮图标：亮色模式下显示 -->
+          <svg v-else xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
+          </svg>
+        </button>
+        
         <!-- 主标签 -->
         <button
           v-for="tab in mainTabs" :key="tab.id"
