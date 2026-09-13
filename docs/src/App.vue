@@ -43,11 +43,13 @@
         class="border-b-2 border-white/20 py-8 last:border-0"
       >
         <!-- 标题 + 评分（水平中线严格对齐） -->
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2">
           <h2 class="text-2xl font-bold text-orange-400 hover:text-orange-300 cursor-pointer transition-colors leading-snug">
             {{ item.title }}
-          </h2>
-          <span v-if="item.score" class="inline-flex items-center bg-orange-500/20 text-orange-300 text-sm font-bold px-2 rounded leading-none">
+          <span
+            v-if="item.score"
+            class="inline-flex items-center bg-orange-500/20 text-orange-300 text-sm font-bold px-2 py-0.5 rounded"
+          >
             {{ item.score }}
           </span>
         </div>
@@ -57,7 +59,7 @@
 
         <!-- 来源行：橙色竖条更长，与文字中线对齐 -->
         <div class="flex items-center gap-2 text-sm text-gray-500 mt-3">
-          <span class="w-0.5 h-4 bg-orange-500 rounded-full"></span>
+          <span class="w-0.5 h-6 bg-orange-500 rounded-full"></span>
           <span>{{ item.source }}</span>
           <span class="text-gray-700">·</span>
           <span>{{ item.author }}</span>
