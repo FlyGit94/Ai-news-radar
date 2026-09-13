@@ -8,8 +8,8 @@ const OUT_FILE = path.resolve('docs/public/assets/data/feed.xml')
 fs.mkdirSync(path.dirname(OUT_FILE), { recursive: true })
 
 const SITE_URL = 'https://flyigit94.github.io/Ai-news-radar'
-const FEED_TITLE = '每日简报'
-const FEED_DESC = 'AI 新闻雷达，每日精选科技/财经/时政/艺术重要资讯'
+const FEED_TITLE = '每周简报'
+const FEED_DESC = 'AI 新闻雷达，每周精选科技/财经/时政/艺术重要资讯'
 const MAX_ITEMS = 30
 
 function escapeXml(str) {
@@ -23,7 +23,7 @@ function escapeXml(str) {
 }
 
 function extractTitle(md, date) {
-  return `每日简报：${date}`
+  return `每周简报：${date}`
 }
 
 function stripLeadingH1(md) {
