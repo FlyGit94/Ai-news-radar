@@ -46,6 +46,7 @@
         <div class="flex items-center gap-2">
           <h2 class="text-2xl font-bold text-orange-400 hover:text-orange-300 cursor-pointer transition-colors leading-snug">
             {{ item.title }}
+          </h2>
           <span
             v-if="item.score"
             class="inline-flex items-center bg-orange-500/20 text-orange-300 text-sm font-bold px-2 py-0.5 rounded"
