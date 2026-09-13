@@ -39,7 +39,7 @@
         v-for="item in filteredItems" :key="item.id"
         class="border-b-2 border-white/20 py-8 last:border-0"
       >
-        <!-- 标题 + 评分（评分加底框，比标题小一号） -->
+        <!-- 标题 + 评分 -->
         <div class="flex items-center gap-3">
           <h2 class="text-2xl font-bold text-orange-400 hover:text-orange-300 cursor-pointer transition-colors leading-snug">
             {{ item.title }}
@@ -52,8 +52,9 @@
         <!-- 摘要 -->
         <p class="text-gray-200 text-base mt-3 leading-relaxed">{{ item.description }}</p>
 
-        <!-- 信息来源行（参考图1 的 telegram 部分） -->
-        <div class="flex items-center flex-wrap gap-2 text-sm text-gray-500 mt-3">
+        <!-- 来源行：左侧加橙色竖条 -->
+        <div class="flex items-center gap-2 text-sm text-gray-500 mt-3">
+          <span class="w-0.5 h-3 bg-orange-500 rounded-full"></span>
           <span>{{ item.source }}</span>
           <span class="text-gray-700">·</span>
           <span>{{ item.author }}</span>
@@ -74,7 +75,7 @@
           </p>
         </div>
 
-        <!-- 参考链接（参考图1 的样式：灰色大圆角背景框） -->
+        <!-- 参考链接 -->
         <div v-if="item.references" class="mt-4">
           <a :href="'https://' + item.references" target="_blank" :title="item.references"
              class="block bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-base text-gray-300 hover:text-white hover:bg-white/10 transition-colors">
@@ -82,7 +83,7 @@
           </a>
         </div>
 
-        <!-- 标签（底框不变，文字改成淡橙色） -->
+        <!-- 标签 -->
         <div v-if="item.tags && item.tags.length" class="mt-2 flex items-center flex-wrap gap-2">
           <span class="text-sm text-gray-400">标签：</span>
           <span
