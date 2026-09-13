@@ -114,12 +114,13 @@
     <!-- 归档列表 -->
     <div v-if="showArchive" class="fixed inset-0 z-[60] bg-dark/95 backdrop-blur-lg overflow-y-auto">
       <div class="max-w-3xl mx-auto py-10 px-6">
-        <!-- 标题：改成“每日简报” -->
+        <!-- 标题：每日简报 -->
         <div class="mb-8">
           <h1 class="text-2xl font-bold text-white">每日简报</h1>
         </div>
 
-        <p class="text-gray-500 text-base mb-6">30 reports · newest first · generated {{ currentDate }}</p>
+        <!-- reports 数量与日期联动 -->
+        <p class="text-gray-500 text-base mb-6">{{ archiveDates.length }} reports · newest first · generated {{ currentDate }}</p>
 
         <!-- Latest report 跳回首页 -->
         <a href="./" class="block bg-white/5 rounded-lg p-4 mb-8 text-base text-blue-400 hover:bg-white/10 transition-colors">
@@ -419,9 +420,17 @@ const filteredItems = computed(() => {
   )
 })
 
-const archiveDates = Array.from({ length: 30 }, (_, i) => {
-  const d = new Date()
-  d.setDate(d.getDate() - i)
-  return d.toISOString().split('T')[0]
-})
+// 归档日期：从 2026-09-12 开始，一直生成到今天（今天在最上面）
+const archiveDates = (() => {
+  const start = new Date('2026-09-12')
+  const today = new Date()
+  const dates = []
+  for (let d = new Date(today); d >= start; d.setDate(d.getDate() - 1)) {
+    const yyyy = d.getFullYear()
+    const mm = String(d.getMonth() + 1).padStart(2, '0')
+    const dd = String(d.getDate()).padStart(2, '0')
+    dates.push(`${yyyy}-${mm}-${dd}`)
+  }
+  return dates
+})()
 </script>
