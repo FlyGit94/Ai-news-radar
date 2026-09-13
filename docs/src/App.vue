@@ -3,15 +3,17 @@
 
     <!-- 顶部吸顶导航 -->
     <header class="sticky top-0 z-50 backdrop-blur-md bg-dark/80 border-b border-white/10">
-      <div class="max-w-4xl mx-auto px-6 pt-6 pb-3 text-center">
+      <!-- 第一层：日期 + 历史归档（比例参考图1） -->
+      <div class="max-w-4xl mx-auto px-6 pt-8 pb-4 text-center">
         <h1 class="text-5xl font-bold text-white tracking-tight">{{ currentDate }}</h1>
-        <div class="mt-3 flex justify-center">
-          <button @click="showArchive = true" class="inline-flex items-center gap-1 text-base text-blue-400 hover:text-blue-300 transition-colors">
+        <div class="mt-5 flex justify-center">
+          <button @click="showArchive = true" class="inline-flex items-center gap-1 text-sm text-blue-400 hover:text-blue-300 transition-colors">
             ← 历史归档
           </button>
         </div>
       </div>
 
+      <!-- 第二层：主标签居中 -->
       <nav class="max-w-4xl mx-auto flex gap-2 px-6 pb-2 text-base justify-center overflow-x-auto whitespace-nowrap">
         <button
           v-for="tab in mainTabs" :key="tab.id"
@@ -22,6 +24,7 @@
         </button>
       </nav>
 
+      <!-- 第三层：子标签居中 -->
       <div class="max-w-4xl mx-auto sticky top-[150px] z-40 bg-dark/80 backdrop-blur-md px-6 py-2 flex gap-3 justify-center overflow-x-auto whitespace-nowrap">
         <button
           v-for="sub in subTabs" :key="sub.id"
