@@ -49,7 +49,7 @@
           </h2>
           <span
             v-if="item.score"
-            class="inline-flex items-center bg-orange-500/20 text-orange-300 text-sm font-bold px-2 py-0.5 rounded"
+            class="inline-flex items-center bg-orange-500/20 text-orange-300 text-sm font-bold px-2 py-0.5 rounded translate-y-0.5"
           >
             {{ item.score }}
           </span>
