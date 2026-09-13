@@ -47,9 +47,14 @@ jobs:
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
+          mkdir -p /tmp/new-summaries
+          cp -r docs/public/data/raw/*.md /tmp/new-summaries/ 2>/dev/null || true
+          git fetch origin main
+          git reset --hard origin/main
+          mkdir -p docs/public/data/raw
+          cp /tmp/new-summaries/*.md docs/public/data/raw/ 2>/dev/null || true
           git add docs/public/data/raw/
           git commit -m "chore: add weekly summary $(date +%Y-%m-%d)" || echo "no changes to commit"
-          git pull --rebase --autostash origin main || git rebase --abort
           git push
 
       - name: Setup Node
