@@ -28,17 +28,6 @@
           {{ tab.name }} <span class="text-sm text-gray-500 ml-1">{{ tab.count }}</span>
         </button>
       </nav>
-
-      <!-- 第三层：子标签（手机端左对齐，电脑端居中） -->
-      <div class="max-w-4xl mx-auto px-4 md:px-6 py-2 flex gap-3 justify-start md:justify-center overflow-x-auto whitespace-nowrap">
-        <button
-          v-for="sub in subTabs" :key="sub.id"
-          @click="activeSubTab = sub.id"
-          :class="['px-3 py-1 rounded-full text-sm transition-colors', activeSubTab === sub.id ? 'bg-white text-black font-bold' : 'bg-white/5 text-gray-400 hover:bg-white/10']"
-        >
-          {{ sub.name }} <span class="ml-1 opacity-70">{{ sub.count }}</span>
-        </button>
-      </div>
     </header>
 
     <!-- 主体内容：卡片流 -->
@@ -63,7 +52,7 @@
         <!-- 摘要 -->
         <p class="text-gray-200 text-base mt-3 leading-relaxed">{{ item.description }}</p>
 
-        <!-- 来源行：橙色竖条下移一点 -->
+        <!-- 来源行 -->
         <div class="flex items-center gap-2 text-sm text-gray-500 mt-3">
           <span class="w-0.5 h-6 bg-orange-500 rounded-full translate-y-0.5"></span>
           <span>{{ item.source }}</span>
@@ -86,7 +75,7 @@
           </p>
         </div>
 
-        <!-- 参考链接（去掉底色，字号小一号） -->
+        <!-- 参考链接 -->
         <div v-if="item.references" class="mt-4">
           <a :href="item.references" target="_blank" :title="item.references"
              class="block border border-white/10 rounded-lg px-3 py-2 text-sm text-gray-300 hover:text-white hover:border-white/20 transition-colors">
@@ -114,23 +103,32 @@
     <!-- 归档列表 -->
     <div v-if="showArchive" class="fixed inset-0 z-[60] bg-dark/95 backdrop-blur-lg overflow-y-auto">
       <div class="max-w-3xl mx-auto py-10 px-6">
-        <!-- 标题：每日简报 -->
-        <div class="mb-8">
+        <!-- 标题 + 关闭 -->
+        <div class="flex items-center justify-between mb-8">
           <h1 class="text-2xl font-bold text-white">每日简报</h1>
+          <button @click="showArchive = false" class="text-gray-400 hover:text-white text-xl leading-none">✕</button>
         </div>
 
-        <!-- reports 数量与日期联动 -->
         <p class="text-gray-500 text-base mb-6">{{ archiveDates.length }} reports · newest first · generated {{ currentDate }}</p>
 
-        <!-- Latest report 跳回首页 -->
-        <a href="./" class="block bg-white/5 rounded-lg p-4 mb-8 text-base text-blue-400 hover:bg-white/10 transition-colors">
-          → Latest report ({{ currentDate }})
-        </a>
+        <!-- Latest report：切回最新一天 -->
+        <button
+          v-if="archiveDates.length > 0"
+          @click="switchDate(archiveDates[0])"
+          class="block w-full text-left bg-white/5 rounded-lg p-4 mb-8 text-base text-blue-400 hover:bg-white/10 transition-colors"
+        >
+          → Latest report ({{ archiveDates[0] }})
+        </button>
 
-        <!-- 日期列表：可点击，跳回首页 -->
+        <!-- 日期列表：点击切换 -->
         <ul class="divide-y divide-white/10">
           <li v-for="date in archiveDates" :key="date" class="flex justify-between py-3">
-            <a href="./" class="text-gray-300 hover:text-white transition-colors text-base">{{ date }}</a>
+            <button
+              @click="switchDate(date)"
+              :class="['text-left transition-colors text-base', date === currentDate ? 'text-blue-400 font-bold' : 'text-gray-300 hover:text-white']"
+            >
+              {{ date }}
+            </button>
             <span class="text-gray-600 text-sm">{{ Math.floor(Math.random() * 50 + 100) }} KB</span>
           </li>
         </ul>
@@ -142,14 +140,16 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 
-const currentDate = '2026-09-13'
+// ====== 当前日期：从常量改成 ref ======
+const currentDate = ref('2026-09-13')
 const showArchive = ref(false)
 const activeTab = ref('tech')
 const activeSubTab = ref('github')
 const scrolled = ref(false)
 
-// ====== 数据从 JSON 加载 ======
+// ====== 数据 ======
 const allItems = ref([])
+const archiveDates = ref([])
 
 onMounted(async () => {
   window.addEventListener('scroll', handleScroll, { passive: true })
@@ -160,21 +160,22 @@ onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
 })
 
-const loadData = async () => {
+// 接受日期参数，默认用 currentDate
+const loadData = async (date) => {
+  const target = date || currentDate.value
   try {
-    const res = await fetch(`./data/${currentDate}.json`)
+    const res = await fetch(`./data/${target}.json`)
     if (res.ok) {
       allItems.value = await res.json()
     } else {
       console.warn('数据加载失败：', res.status)
+      allItems.value = []
     }
   } catch (e) {
     console.error('加载数据失败', e)
+    allItems.value = []
   }
 }
-
-// ====== 归档日期：从 index.json 动态读取 ======
-const archiveDates = ref([])
 
 const loadIndex = async () => {
   try {
@@ -187,11 +188,28 @@ const loadIndex = async () => {
   }
 }
 
+// ====== 切换日期 ======
+const switchDate = async (date) => {
+  if (!date || date === currentDate.value) {
+    showArchive.value = false
+    return
+  }
+  currentDate.value = date
+  // 重置标签
+  activeTab.value = 'tech'
+  activeSubTab.value = 'github'
+  // 重新加载数据
+  await loadData(date)
+  // 关闭归档、滚回顶部
+  showArchive.value = false
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
 const handleScroll = () => {
   scrolled.value = window.innerWidth < 768 && window.scrollY > 40
 }
 
-// ====== 主标签（数量动态计算） ======
+// ====== 主标签（动态 count） ======
 const mainTabs = computed(() => [
   { id: 'tech', name: '技术动态', count: allItems.value.filter(i => i.category === 'tech').length },
   { id: 'market', name: '市场行情', count: allItems.value.filter(i => i.category === 'market').length },
@@ -200,50 +218,40 @@ const mainTabs = computed(() => [
   { id: 'community', name: '社区讨论', count: allItems.value.filter(i => i.category === 'community').length },
 ])
 
-// ====== 子标签 ======
-const subTabsMap = {
-  tech: [
-    { id: 'github', name: 'GitHub Trending', count: 16 },
-    { id: 'papers', name: '热门论文', count: 20 },
-    { id: 'twitter', name: 'X 推文', count: 14 },
-    { id: 'media', name: 'AI 媒体', count: 15 },
-  ],
-  market: [
-    { id: 'stocks', name: '股市快报', count: 8 },
-    { id: 'crypto', name: '加密货币', count: 5 },
-  ],
-  politics: [
-    { id: 'china', name: '国内时政', count: 6 },
-    { id: 'world', name: '国际时政', count: 4 },
-  ],
-  finance: [
-    { id: 'macro', name: '宏观经济', count: 5 },
-    { id: 'company', name: '公司财报', count: 4 },
-  ],
-  community: [
-    { id: 'v2ex', name: 'V2EX', count: 6 },
-    { id: 'linuxdo', name: 'LinuxDo', count: 4 },
-  ],
-}
-
-const subTabs = computed(() => subTabsMap[activeTab.value] || [])
+// ====== 子标签（按 source 动态生成） ======
+const subTabs = computed(() => {
+  const items = allItems.value.filter(i => i.category === activeTab.value)
+  const map = {}
+  for (const item of items) {
+    const src = item.source || 'other'
+    if (!map[src]) map[src] = { id: src, name: src, count: 0 }
+    map[src].count++
+  }
+  const tabs = Object.values(map)
+  // 如果只有一个来源，就不显示子标签（避免顶部空着一排）
+  return tabs.length > 1 ? tabs : []
+})
 
 watch(activeTab, () => {
-  const tabs = subTabsMap[activeTab.value]
-  if (tabs && tabs.length > 0) {
+  const tabs = subTabs.value
+  if (tabs.length > 0) {
     activeSubTab.value = tabs[0].id
+  } else {
+    activeSubTab.value = ''
   }
 })
 
 // ====== 过滤逻辑 ======
-// 优先按 subCategory 过滤；如果当前子标签下没有匹配，就回退到显示该 category 下所有内容
 const filteredItems = computed(() => {
+  // 没有子标签时，直接显示该主分类下全部
+  if (subTabs.value.length === 0) {
+    return allItems.value.filter(item => item.category === activeTab.value)
+  }
+  // 有子标签时，按 source 过滤
   const bySub = allItems.value.filter(item =>
-    item.category === activeTab.value && item.subCategory === activeSubTab.value
+    item.category === activeTab.value && item.source === activeSubTab.value
   )
   if (bySub.length > 0) return bySub
-
-  // 回退：只按 category 过滤（兜底，防止 md 里 subCategory 对不上时一片空白）
   return allItems.value.filter(item => item.category === activeTab.value)
 })
 </script>
