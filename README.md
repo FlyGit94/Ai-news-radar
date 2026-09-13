@@ -61,3 +61,9 @@ Ai-news-radar/
 ├── uv.lock                            # 依赖锁定
 └── README.md
 ```
+
+---
+
+🙏 致谢
++ Horizon：后端抓取、AI 分析、简报生成
++ Vue 3、Vite、Tailwind CSS：前端
