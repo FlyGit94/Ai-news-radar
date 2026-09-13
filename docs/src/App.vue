@@ -220,7 +220,7 @@ const loadData = async (date) => {
   const target = date || currentDate.value
   console.log('[loadData] 开始加载:', target)
   try {
-    const res = await fetch(`./data/${target}.json`)
+    const res = await fetch(`./assets/data/${target}.json`)
     console.log('[loadData] 状态码:', res.status)
     if (res.ok) {
       allItems.value = await res.json()
