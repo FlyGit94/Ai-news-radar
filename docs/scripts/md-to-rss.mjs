@@ -105,7 +105,7 @@ const rss = `<?xml version="1.0" encoding="UTF-8"?>
     <description>${escapeXml(FEED_DESC)}</description>
     <language>zh-CN</language>
     <lastBuildDate>${now}</lastBuildDate>
-    <atom:link href="${SITE_URL}/data/feed.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="${SITE_URL}/assets/data/feed.xml" rel="self" type="application/rss+xml" />
 ${items.map(item => `    <item>
       <title>${escapeXml(item.title)}</title>
       <link>${escapeXml(item.link)}</link>
