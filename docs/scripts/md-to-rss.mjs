@@ -23,7 +23,6 @@ function escapeXml(str) {
 
 // 从 md 里提取纯文本摘要（去掉 markdown 语法）
 function extractSummary(md) {
-  // 拿到正文部分（去掉 front matter）
   const lines = md.split('\n')
   const bodyLines = []
   let inFrontMatter = false
@@ -41,7 +40,7 @@ function extractSummary(md) {
     bodyLines.push(line)
   }
 
-  // 找第一个普通段落（跳过标题、引用、空行）
+  // 找第一个普通段落（跳过标题、引用、列表、加粗、编号）
   for (const line of bodyLines) {
     const trimmed = line.trim()
     if (!trimmed) continue
@@ -49,7 +48,9 @@ function extractSummary(md) {
     if (trimmed.startsWith('>')) continue
     if (trimmed.startsWith('---')) continue
     if (trimmed.startsWith('<')) continue
-    // 普通段落
+    if (trimmed.startsWith('**')) continue       // ← 跳过加粗（如 **科技新闻**）
+    if (/^\d+\.\s/.test(trimmed)) continue        // ← 跳过编号列表
+    if (trimmed.startsWith('- ')) continue        // ← 跳过无序列表
     return trimmed.slice(0, 300)
   }
   return ''
