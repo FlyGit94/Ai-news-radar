@@ -3,11 +3,11 @@
 
     <!-- 顶部吸顶导航 -->
     <header class="sticky top-0 z-50 backdrop-blur-md bg-dark/80 border-b border-white/10">
-      <!-- 第一层：日期 + 历史归档（比例参考图1） -->
+      <!-- 第一层：日期 + 历史归档 -->
       <div class="max-w-4xl mx-auto px-6 pt-8 pb-4 text-center">
         <h1 class="text-5xl font-bold text-white tracking-tight">{{ currentDate }}</h1>
         <div class="mt-5 flex justify-center">
-          <button @click="showArchive = true" class="inline-flex items-center gap-1 text-sm text-blue-400 hover:text-blue-300 transition-colors">
+          <button @click="showArchive = true" class="inline-flex items-center gap-1 text-xs text-blue-400 hover:text-blue-300 transition-colors">
             ← 历史归档
           </button>
         </div>
@@ -42,12 +42,12 @@
         v-for="item in filteredItems" :key="item.id"
         class="border-b-2 border-white/20 py-8 last:border-0"
       >
-        <!-- 标题 + 评分 -->
+        <!-- 标题 + 评分（水平中线严格对齐） -->
         <div class="flex items-center gap-3">
           <h2 class="text-2xl font-bold text-orange-400 hover:text-orange-300 cursor-pointer transition-colors leading-snug">
             {{ item.title }}
           </h2>
-          <span v-if="item.score" class="shrink-0 bg-orange-500/20 text-orange-300 text-sm font-bold px-2 py-0.5 rounded">
+          <span v-if="item.score" class="inline-flex items-center bg-orange-500/20 text-orange-300 text-sm font-bold px-2 rounded leading-none">
             {{ item.score }}
           </span>
         </div>
@@ -55,9 +55,9 @@
         <!-- 摘要 -->
         <p class="text-gray-200 text-base mt-3 leading-relaxed">{{ item.description }}</p>
 
-        <!-- 来源行：左侧加橙色竖条 -->
+        <!-- 来源行：橙色竖条更长，与文字中线对齐 -->
         <div class="flex items-center gap-2 text-sm text-gray-500 mt-3">
-          <span class="w-0.5 h-3 bg-orange-500 rounded-full"></span>
+          <span class="w-0.5 h-4 bg-orange-500 rounded-full"></span>
           <span>{{ item.source }}</span>
           <span class="text-gray-700">·</span>
           <span>{{ item.author }}</span>
