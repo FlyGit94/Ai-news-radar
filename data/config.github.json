@@ -189,13 +189,6 @@
         "profile": "film-tv"
       },
       {
-        "name": "MUBI Notebook",
-        "url": "https://mubi.com/notebook/rss",
-        "enabled": true,
-        "category": "film-tv",
-        "profile": "film-tv"
-      },
-      {
         "name": "Al Jazeera",
         "url": "https://www.aljazeera.com/xml/rss/all.xml",
         "enabled": true,
