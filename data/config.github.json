@@ -150,6 +150,48 @@
         "profile": "art-news"
       },
       {
+        "name": "Hyperallergic",
+        "url": "https://hyperallergic.com/feed/",
+        "enabled": true,
+        "category": "art-news",
+        "profile": "art-news"
+      },
+      {
+        "name": "Artnet News",
+        "url": "https://news.artnet.com/feed",
+        "enabled": true,
+        "category": "art-news",
+        "profile": "art-news"
+      },
+      {
+        "name": "IndieWire",
+        "url": "https://www.indiewire.com/feed/",
+        "enabled": true,
+        "category": "art-news",
+        "profile": "art-news"
+      },
+      {
+        "name": "Variety",
+        "url": "https://variety.com/feed/",
+        "enabled": true,
+        "category": "art-news",
+        "profile": "art-news"
+      },
+      {
+        "name": "The Hollywood Reporter",
+        "url": "https://www.hollywoodreporter.com/feed/",
+        "enabled": true,
+        "category": "art-news",
+        "profile": "art-news"
+      },
+      {
+        "name": "MUBI Notebook",
+        "url": "https://mubi.com/notebook/rss",
+        "enabled": true,
+        "category": "art-news",
+        "profile": "art-news"
+      },
+      {
         "name": "Al Jazeera",
         "url": "https://www.aljazeera.com/xml/rss/all.xml",
         "enabled": true,
