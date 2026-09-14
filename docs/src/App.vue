@@ -283,7 +283,7 @@ const mainTabs = computed(() => {
     { id: 'tech', name: '科技资讯', count: allItems.value.filter(i => i.category === 'tech').length },
     { id: 'finance', name: '财经要事', count: allItems.value.filter(i => i.category === 'finance').length },
     { id: 'politics', name: '时政观察', count: allItems.value.filter(i => i.category === 'politics').length },
-    { id: 'art', name: '当代艺术', count: allItems.value.filter(i => i.category === 'art').length },
+    { id: 'art', name: '文化艺术', count: allItems.value.filter(i => i.category === 'art').length },
     { id: 'other', name: '其他', count: allItems.value.filter(i => i.category === 'other').length },
   ]
   return tabs.filter(t => t.count > 0)
