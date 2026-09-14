@@ -13,6 +13,7 @@ const categoryMap = {
   '财经新闻': { category: 'finance', subCategory: 'stocks' },
   '时政观察': { category: 'politics', subCategory: 'china' },
   '文化艺术': { category: 'art', subCategory: 'general' },
+  '影视动态': { category: 'film-tv', subCategory: 'general' },
 }
 
 // 默认兜底分类
