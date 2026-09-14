@@ -36,6 +36,10 @@
       "art-news": {
         "threshold": 7.5,
         "topic_dedup": true
+      },
+      "film-tv": {
+        "threshold": 7.5,
+        "topic_dedup": true
       }
     }
   },
@@ -167,29 +171,29 @@
         "name": "IndieWire",
         "url": "https://www.indiewire.com/feed/",
         "enabled": true,
-        "category": "art-news",
-        "profile": "art-news"
+        "category": "film-tv",
+        "profile": "film-tv"
       },
       {
         "name": "Variety",
         "url": "https://variety.com/feed/",
         "enabled": true,
-        "category": "art-news",
-        "profile": "art-news"
+        "category": "film-tv",
+        "profile": "film-tv"
       },
       {
         "name": "The Hollywood Reporter",
         "url": "https://www.hollywoodreporter.com/feed/",
         "enabled": true,
-        "category": "art-news",
-        "profile": "art-news"
+        "category": "film-tv",
+        "profile": "film-tv"
       },
       {
         "name": "MUBI Notebook",
         "url": "https://mubi.com/notebook/rss",
         "enabled": true,
-        "category": "art-news",
-        "profile": "art-news"
+        "category": "film-tv",
+        "profile": "film-tv"
       },
       {
         "name": "Al Jazeera",
@@ -260,7 +264,8 @@
       "tech-blog",
       "finance-news",
       "politics",
-      "art-news"
+      "art-news",
+      "film-tv"
     ],
     "category_groups": {
       "技术动态": {
@@ -277,7 +282,11 @@
       },
       "文化艺术": {
         "categories": ["art-news"],
-        "limit": 8
+        "limit": 6
+      },
+      "影视动态": {
+        "categories": ["film-tv"],
+        "limit": 6
       }
     },
     "default_group": "other",
