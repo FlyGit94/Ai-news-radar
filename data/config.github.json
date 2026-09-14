@@ -18,7 +18,7 @@
     "default_profile": "tech-news",
     "profile_settings": {
       "tech-news": {
-        "threshold": 7.0,
+        "threshold": 7.5,
         "topic_dedup": true
       },
       "tech-blog": {
@@ -26,15 +26,15 @@
         "topic_dedup": false
       },
       "finance-news": {
-        "threshold": 7.0,
+        "threshold": 7.5,
         "topic_dedup": true
       },
       "politics": {
-        "threshold": 7.0,
+        "threshold": 7.5,
         "topic_dedup": true
       },
       "art-news": {
-        "threshold": 7.0,
+        "threshold": 7.5,
         "topic_dedup": true
       }
     }
@@ -122,27 +122,6 @@
         "profile": "finance-news"
       },
       {
-        "name": "WSJ",
-        "url": "https://feeds.a.dj.com/rss/RSSMarketsMain.xml",
-        "enabled": true,
-        "category": "finance-news",
-        "profile": "finance-news"
-      },
-      {
-        "name": "FT",
-        "url": "https://www.ft.com/companies/technology/rss",
-        "enabled": true,
-        "category": "finance-news",
-        "profile": "finance-news"
-      },
-      {
-        "name": "BBC Business",
-        "url": "https://feeds.bbci.co.uk/news/business/rss.xml",
-        "enabled": true,
-        "category": "finance-news",
-        "profile": "finance-news"
-      },
-      {
         "name": "GitHub Trending - Daily",
         "url": "https://mshibanami.github.io/GitHubTrendingRSS/daily/all.xml",
         "enabled": true,
@@ -152,13 +131,6 @@
       {
         "name": "Semianalysis",
         "url": "https://newsletter.semianalysis.com/feed",
-        "enabled": true,
-        "category": "tech-news",
-        "profile": "tech-news"
-      },
-      {
-        "name": "LWN.net",
-        "url": "https://lwn.net/headlines/full_text?key=${LWN_KEY}",
         "enabled": true,
         "category": "tech-news",
         "profile": "tech-news"
@@ -192,50 +164,8 @@
         "profile": "politics"
       },
       {
-        "name": "DW Chinese",
-        "url": "https://rss.dw.com/rdf/rss-chi-all",
-        "enabled": true,
-        "category": "world-news",
-        "profile": "politics"
-      },
-      {
-        "name": "NYT",
-        "url": "https://rss.nytimes.com/services/xml/rss/nyt/World.xml",
-        "enabled": true,
-        "category": "world-news",
-        "profile": "politics"
-      },
-      {
-        "name": "NPR",
-        "url": "https://feeds.npr.org/1004/rss.xml",
-        "enabled": true,
-        "category": "world-news",
-        "profile": "politics"
-      },
-      {
         "name": "DW 中文",
         "url": "https://rss.dw.com/rdf/rss-chi-world",
-        "enabled": true,
-        "category": "world-news",
-        "profile": "politics"
-      },
-      {
-        "name": "The Diplomat",
-        "url": "https://thediplomat.com/feed",
-        "enabled": true,
-        "category": "world-news",
-        "profile": "politics"
-      },
-      {
-        "name": "The Guardian (World)",
-        "url": "https://www.theguardian.com/world/rss",
-        "enabled": true,
-        "category": "world-news",
-        "profile": "politics"
-      },
-      {
-        "name": "CNN World",
-        "url": "http://rss.cnn.com/rss/edition_world.rss",
         "enabled": true,
         "category": "world-news",
         "profile": "politics"
@@ -293,19 +223,19 @@
     "category_groups": {
       "技术动态": {
         "categories": ["tech-news"],
-        "limit": 8
+        "limit": 6
       },
       "财经要点": {
         "categories": ["finance-news"],
-        "limit": 8
+        "limit": 6
       },
       "时政观察": {
         "categories": ["world-news"],
-        "limit": 8
+        "limit": 6
       },
       "艺术新闻": {
         "categories": ["art-news"],
-        "limit": 8
+        "limit": 6
       }
     },
     "default_group": "other",
