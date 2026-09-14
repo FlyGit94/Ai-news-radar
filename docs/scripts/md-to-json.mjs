@@ -16,7 +16,7 @@ const categoryMap = {
 }
 
 // 默认兜底分类
-const DEFAULT_CATEGORY = { category: 'tech', subCategory: 'github' }
+const DEFAULT_CATEGORY = { category: 'other', subCategory: 'general' }
 
 // 从 md 顶部提取「从 X 条内容中筛选出 Y 条重要资讯」
 function extractStats(md) {
