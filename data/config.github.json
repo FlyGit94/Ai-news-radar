@@ -275,9 +275,9 @@
         "categories": ["world-news"],
         "limit": 6
       },
-      "艺术新闻": {
+      "文化艺术": {
         "categories": ["art-news"],
-        "limit": 6
+        "limit": 8
       }
     },
     "default_group": "other",
