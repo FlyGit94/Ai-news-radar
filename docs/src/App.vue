@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-white text-gray-800 dark:bg-dark dark:text-gray-200">
+  <div class="min-h-screen bg-cream text-ink dark:bg-dark dark:text-gray-200">
 
     <!-- 顶部吸顶导航 -->
     <header class="sticky top-0 z-50 border-b border-black/10 dark:border-white/10 bg-white md:backdrop-blur-md md:bg-white/80 dark:bg-dark md:dark:bg-dark/80">
