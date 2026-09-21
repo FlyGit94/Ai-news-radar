@@ -119,7 +119,7 @@
     <!-- 归档列表 -->
     <div
       v-if="showArchive"
-      class="fixed inset-0 z-[60] bg-white/95 dark:bg-dark/95 backdrop-blur-lg overflow-y-auto"
+      class="fixed inset-0 z-[60] bg-cream/95 dark:bg-dark/95 backdrop-blur-lg overflow-y-auto"
     >
       <div class="max-w-3xl mx-auto py-10 px-6">
         <!-- 标题 -->
